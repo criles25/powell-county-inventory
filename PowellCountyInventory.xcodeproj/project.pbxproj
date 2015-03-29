@@ -22,6 +22,7 @@
 		AB0760B21AB23ADB00D16EA9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0760B11AB23ADB00D16EA9 /* SystemConfiguration.framework */; };
 		AB0760B41AB23AE200D16EA9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0760B31AB23AE200D16EA9 /* libz.dylib */; };
 		AB0760B61AB23AED00D16EA9 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0760B51AB23AED00D16EA9 /* libsqlite3.dylib */; };
+		AB09CA661AC83F29001FAB55 /* AddUpdateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB09CA651AC83F29001FAB55 /* AddUpdateViewController.m */; };
 		AB29B4101AAA623C0032DBE0 /* settings_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AB29B40F1AAA623C0032DBE0 /* settings_icon.png */; };
 		AB34D7541AB49E4C0069AB5E /* ExportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB34D7531AB49E4C0069AB5E /* ExportViewController.m */; };
 		AB4881F01AC1CA8600211665 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB4881EF1AC1CA8600211665 /* SearchController.m */; };
@@ -71,6 +72,8 @@
 		AB0760B11AB23ADB00D16EA9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		AB0760B31AB23AE200D16EA9 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		AB0760B51AB23AED00D16EA9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		AB09CA641AC83F29001FAB55 /* AddUpdateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddUpdateViewController.h; sourceTree = "<group>"; };
+		AB09CA651AC83F29001FAB55 /* AddUpdateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddUpdateViewController.m; sourceTree = "<group>"; };
 		AB29B40F1AAA623C0032DBE0 /* settings_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings_icon.png; path = iOS7_BarcodeScanner/settings_icon.png; sourceTree = "<group>"; };
 		AB34D7521AB49E4C0069AB5E /* ExportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportViewController.h; sourceTree = "<group>"; };
 		AB34D7531AB49E4C0069AB5E /* ExportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExportViewController.m; sourceTree = "<group>"; };
@@ -255,6 +258,8 @@
 				D41746D71837EA2900F83533 /* ScannerViewController.m */,
 				AB4881EE1AC1C9B700211665 /* SearchController.h */,
 				AB4881EF1AC1CA8600211665 /* SearchController.m */,
+				AB09CA641AC83F29001FAB55 /* AddUpdateViewController.h */,
+				AB09CA651AC83F29001FAB55 /* AddUpdateViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -367,6 +372,7 @@
 				AB4881F31AC22FF600211665 /* ImportViewController.m in Sources */,
 				AB4881F01AC1CA8600211665 /* SearchController.m in Sources */,
 				D46D5E7C188DC18300E0DF31 /* SettingsViewController.m in Sources */,
+				AB09CA661AC83F29001FAB55 /* AddUpdateViewController.m in Sources */,
 				D41746D81837EA2900F83533 /* ScannerViewController.m in Sources */,
 				D41746A91837E91900F83533 /* main.m in Sources */,
 			);

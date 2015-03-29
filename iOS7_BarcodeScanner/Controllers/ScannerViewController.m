@@ -267,14 +267,14 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
             message = [[UIAlertView alloc] initWithTitle:@"Barcode Found!"
                                                               message:alertMessage
                                                              delegate:self
-                                                    cancelButtonTitle:@"Done"
+                                                    cancelButtonTitle:@"Update"
                                                     otherButtonTitles:@"Scan again",nil];
 
         } else {
             message = [[UIAlertView alloc] initWithTitle:@"Barcode Not Found!"
                                                               message:alertMessage
                                                              delegate:self
-                                                    cancelButtonTitle:@"Done"
+                                                    cancelButtonTitle:@"Add"
                                                     otherButtonTitles:@"Scan again",nil];
 
         }
