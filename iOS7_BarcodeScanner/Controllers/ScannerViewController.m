@@ -202,7 +202,6 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
 - (void) validBarcodeFound:(Barcode *)barcode{
     [self stopRunning];
     [self.foundBarcodes addObject:barcode];
-    [self showBarcodeAlert:barcode];
     
     // Charles Riley
     PFQuery *query = [PFQuery queryWithClassName:@"practice"];
@@ -213,14 +212,18 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
             NSLog(@"Found barcode %@.\n", barcode.getBarcodeData);
             object[@"serial"] = barcode.getBarcodeData;
             [object saveInBackground];
+            [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"teacher"]];
         } else {
             // barcode not found
-            PFObject *object = [PFObject objectWithClassName:@"practice"];
-            object[@"serial"] = barcode.getBarcodeData;
-            [object saveInBackground];
+            NSLog(@"Barcode not found %@.\n", barcode.getBarcodeData);
+            //PFObject *object = [PFObject objectWithClassName:@"practice"];
+            //object[@"serial"] = barcode.getBarcodeData;
+            //[object saveInBackground];
+            [self showBarcodeAlert:barcode barcodeFound:NO inRoom:nil];
         }
     }];
 
+    
 /*
     //==The following code using parse was written by Maria Ramos==
 
@@ -247,22 +250,34 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     }];
  */
 }
-- (void) showBarcodeAlert:(Barcode *)barcode{
+- (void) showBarcodeAlert:(Barcode *)barcode barcodeFound:(BOOL)found inRoom:(NSString *)room{
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Code to do in background processing
-        NSString * alertMessage = @"You found a barcode with type ";
+        NSString * alertMessage = @"You scanned a barcode with type ";
         alertMessage = [alertMessage stringByAppendingString:[barcode getBarcodeType]];
-//        alertMessage = [alertMessage stringByAppendingString:@" and data "];
-//        alertMessage = [alertMessage stringByAppendingString:[barcode getBarcodeData]];
-        alertMessage = [alertMessage stringByAppendingString:@"\n\nBarcode added to array of "];
-        alertMessage = [alertMessage stringByAppendingString:[NSString stringWithFormat:@"%lu",(unsigned long)[self.foundBarcodes count]-1]];
-        alertMessage = [alertMessage stringByAppendingString:@" previously found barcodes."];
-        
-        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Barcode Found!"
-                                                          message:alertMessage
-                                                         delegate:self
-                                                cancelButtonTitle:@"Done"
-                                                otherButtonTitles:@"Scan again",nil];
+        alertMessage = [alertMessage stringByAppendingString:@" and data "];
+        alertMessage = [alertMessage stringByAppendingString:[barcode getBarcodeData]];
+        //alertMessage = [alertMessage stringByAppendingString:@"\n\nBarcode added to array of "];
+        //alertMessage = [alertMessage stringByAppendingString:[NSString stringWithFormat:@"%lu",(unsigned long)[self.foundBarcodes count]-1]];
+        //alertMessage = [alertMessage stringByAppendingString:@" previously found barcodes."];
+        UIAlertView *message;
+        if (found) {
+            alertMessage = [alertMessage stringByAppendingString:@" and room "];
+            alertMessage = [alertMessage stringByAppendingString:room];
+            message = [[UIAlertView alloc] initWithTitle:@"Barcode Found!"
+                                                              message:alertMessage
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Done"
+                                                    otherButtonTitles:@"Scan again",nil];
+
+        } else {
+            message = [[UIAlertView alloc] initWithTitle:@"Barcode Not Found!"
+                                                              message:alertMessage
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Done"
+                                                    otherButtonTitles:@"Scan again",nil];
+
+        }
         
         
         dispatch_async(dispatch_get_main_queue(), ^{
