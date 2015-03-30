@@ -289,11 +289,11 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex == 0){
-        //Code for Done button
-        // TODO: Create a finished view
+        // Code for Add/Update button
+        [self performSegueWithIdentifier:@"unwindToPCInventory" sender:self];
     }
     if(buttonIndex == 1){
-        //Code for Scan more button
+        // Code for Scan more button
         [self startRunning];
     }
 }
@@ -306,6 +306,8 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
         self.allowedBarcodeTypes = [NSMutableArray arrayWithArray:allowedTypes];
     }
 }
+
+
 
 @end
 

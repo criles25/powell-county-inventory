@@ -23,6 +23,7 @@
 		AB0760B41AB23AE200D16EA9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0760B31AB23AE200D16EA9 /* libz.dylib */; };
 		AB0760B61AB23AED00D16EA9 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0760B51AB23AED00D16EA9 /* libsqlite3.dylib */; };
 		AB09CA661AC83F29001FAB55 /* AddUpdateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB09CA651AC83F29001FAB55 /* AddUpdateViewController.m */; };
+		AB09CA6C1AC8559C001FAB55 /* PowellCountyInventoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB09CA6B1AC8559C001FAB55 /* PowellCountyInventoryViewController.m */; };
 		AB29B4101AAA623C0032DBE0 /* settings_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AB29B40F1AAA623C0032DBE0 /* settings_icon.png */; };
 		AB34D7541AB49E4C0069AB5E /* ExportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB34D7531AB49E4C0069AB5E /* ExportViewController.m */; };
 		AB4881F01AC1CA8600211665 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB4881EF1AC1CA8600211665 /* SearchController.m */; };
@@ -74,6 +75,8 @@
 		AB0760B51AB23AED00D16EA9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		AB09CA641AC83F29001FAB55 /* AddUpdateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddUpdateViewController.h; sourceTree = "<group>"; };
 		AB09CA651AC83F29001FAB55 /* AddUpdateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddUpdateViewController.m; sourceTree = "<group>"; };
+		AB09CA6A1AC8559C001FAB55 /* PowellCountyInventoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PowellCountyInventoryViewController.h; sourceTree = "<group>"; };
+		AB09CA6B1AC8559C001FAB55 /* PowellCountyInventoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PowellCountyInventoryViewController.m; sourceTree = "<group>"; };
 		AB29B40F1AAA623C0032DBE0 /* settings_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings_icon.png; path = iOS7_BarcodeScanner/settings_icon.png; sourceTree = "<group>"; };
 		AB34D7521AB49E4C0069AB5E /* ExportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportViewController.h; sourceTree = "<group>"; };
 		AB34D7531AB49E4C0069AB5E /* ExportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExportViewController.m; sourceTree = "<group>"; };
@@ -260,6 +263,8 @@
 				AB4881EF1AC1CA8600211665 /* SearchController.m */,
 				AB09CA641AC83F29001FAB55 /* AddUpdateViewController.h */,
 				AB09CA651AC83F29001FAB55 /* AddUpdateViewController.m */,
+				AB09CA6A1AC8559C001FAB55 /* PowellCountyInventoryViewController.h */,
+				AB09CA6B1AC8559C001FAB55 /* PowellCountyInventoryViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -368,6 +373,7 @@
 			files = (
 				D41746DB1837EA5900F83533 /* Barcode.m in Sources */,
 				D41746AD1837E91900F83533 /* AppDelegate.m in Sources */,
+				AB09CA6C1AC8559C001FAB55 /* PowellCountyInventoryViewController.m in Sources */,
 				AB34D7541AB49E4C0069AB5E /* ExportViewController.m in Sources */,
 				AB4881F31AC22FF600211665 /* ImportViewController.m in Sources */,
 				AB4881F01AC1CA8600211665 /* SearchController.m in Sources */,

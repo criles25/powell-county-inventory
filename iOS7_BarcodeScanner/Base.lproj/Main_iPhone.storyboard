@@ -44,9 +44,11 @@
                     <connections>
                         <outlet property="previewView" destination="Kzv-Hc-8xc" id="6JX-qW-DaD"/>
                         <segue destination="gEc-G3-wJU" kind="push" identifier="toSettings" id="qWT-cn-79S"/>
+                        <segue destination="WlI-Rz-N6Y" kind="unwind" identifier="unwindToPCInventory" unwindAction="unwindToPCInventory:" id="DKi-qc-5VT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <exit id="WlI-Rz-N6Y" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1269" y="62"/>
         </scene>
@@ -278,7 +280,7 @@
         <!--Powell County Inventory-->
         <scene sceneID="jDT-kg-v5k">
             <objects>
-                <viewController id="aKl-MC-6UG" sceneMemberID="viewController">
+                <viewController id="aKl-MC-6UG" customClass="PowellCountyInventoryViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4Co-o8-IZb"/>
                         <viewControllerLayoutGuide type="bottom" id="ngk-ZA-GuQ"/>
