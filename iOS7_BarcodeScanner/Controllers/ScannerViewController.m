@@ -42,10 +42,15 @@
     AVCaptureVideoPreviewLayer *_previewLayer;
     BOOL _running;
     AVCaptureMetadataOutput *_metadataOutput;
+    
+    // keep track of if UIAlert showing
+    BOOL alertShowing;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    alertShowing = false;
     
     [self setupCaptureSession];
     _previewLayer.frame = _previewView.bounds;
@@ -204,24 +209,28 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     [self.foundBarcodes addObject:barcode];
     
     // Charles Riley
-    PFQuery *query = [PFQuery queryWithClassName:@"practice"];
-    [query whereKey:@"serial" equalTo:barcode.getBarcodeData];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!error) {
-            // barcode found
-            NSLog(@"Found barcode %@.\n", barcode.getBarcodeData);
-            object[@"serial"] = barcode.getBarcodeData;
-            [object saveInBackground];
-            [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"teacher"]];
-        } else {
-            // barcode not found
-            NSLog(@"Barcode not found %@.\n", barcode.getBarcodeData);
-            //PFObject *object = [PFObject objectWithClassName:@"practice"];
-            //object[@"serial"] = barcode.getBarcodeData;
-            //[object saveInBackground];
-            [self showBarcodeAlert:barcode barcodeFound:NO inRoom:nil];
-        }
-    }];
+    if (!self->alertShowing) {
+        self->alertShowing = true;
+        PFQuery *query = [PFQuery queryWithClassName:@"practice"];
+        [query whereKey:@"serial" equalTo:barcode.getBarcodeData];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            if (!error) {
+                // barcode found
+                NSLog(@"Found barcode %@.\n", barcode.getBarcodeData);
+                object[@"serial"] = barcode.getBarcodeData;
+                [object saveInBackground];
+                [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"teacher"]];
+            } else {
+                // barcode not found
+                NSLog(@"Barcode not found %@.\n", barcode.getBarcodeData);
+                //PFObject *object = [PFObject objectWithClassName:@"practice"];
+                //object[@"serial"] = barcode.getBarcodeData;
+                //[object saveInBackground];
+                [self showBarcodeAlert:barcode barcodeFound:NO inRoom:nil];
+            }
+        }];
+    }
+    
 
     
 /*
@@ -290,10 +299,12 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex == 0){
         // Code for Add/Update button
+        self->alertShowing = false;
         [self performSegueWithIdentifier:@"unwindToPCInventory" sender:self];
     }
     if(buttonIndex == 1){
         // Code for Scan more button
+        self->alertShowing = false;
         [self startRunning];
     }
 }

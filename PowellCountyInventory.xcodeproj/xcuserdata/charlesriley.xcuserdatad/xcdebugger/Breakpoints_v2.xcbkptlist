@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iOS7_BarcodeScanner/Controllers/ScannerViewController.m"
-            timestampString = "449339361.017465"
+            timestampString = "449458212.196485"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
             landmarkName = "-validBarcodeFound:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iOS7_BarcodeScanner/Controllers/ScannerViewController.m"
-            timestampString = "449339361.017465"
+            timestampString = "449458212.196485"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
             landmarkName = "-validBarcodeFound:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,59 +42,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iOS7_BarcodeScanner/Controllers/ScannerViewController.m"
-            timestampString = "449339361.017465"
+            timestampString = "449457948.4739"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
-            landmarkName = "-validBarcodeFound:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ScannerViewController validBarcodeFound:]"
-                  moduleName = "iOS7_BarcodeScanner"
-                  urlString = "file:///Users/charlesriley/Downloads/iOS7-BarcodeScanner-master/iOS7_BarcodeScanner/iOS7_BarcodeScanner/Controllers/ScannerViewController.m"
-                  timestampString = "448652185.444977"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "210"
-                  endingLineNumber = "210"
-                  offsetFromSymbolStart = "438">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__43-[ScannerViewController validBarcodeFound:]_block_invoke"
-                  moduleName = "iOS7_BarcodeScanner"
-                  urlString = "file:///Users/charlesriley/Downloads/iOS7-BarcodeScanner-master/iOS7_BarcodeScanner/iOS7_BarcodeScanner/Controllers/ScannerViewController.m"
-                  timestampString = "448652185.445294"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "210"
-                  endingLineNumber = "210"
-                  offsetFromSymbolStart = "54">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iOS7_BarcodeScanner/Controllers/ScannerViewController.m"
-            timestampString = "449339361.017465"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
-            landmarkName = "-validBarcodeFound:"
-            landmarkType = "5">
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "@implementation ScannerViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
