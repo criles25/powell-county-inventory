@@ -32,14 +32,14 @@
 - (IBAction)handleExportButtonClick:(id)sender {
     // Charles Riley
     // query database
-    PFQuery *query = [PFQuery queryWithClassName:@"practice"];
+    PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
     if (self.buildingTextField.text.length > 0) {
         NSArray *buildings = [self.buildingTextField.text componentsSeparatedByString:@" "];
         [query whereKey:@"building" containedIn:buildings];
     }
     if (self.roomTextField.text.length > 0) {
         NSArray *rooms = [self.roomTextField.text componentsSeparatedByString:@" "];
-        [query whereKey:@"teacher" containedIn:rooms];
+        [query whereKey:@"room" containedIn:rooms];
     }
     if (self.deviceTextField.text.length > 0) {
         NSArray *devices = [self.deviceTextField.text componentsSeparatedByString:@" "];
@@ -49,22 +49,23 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             // code to build .csv file
-            NSString *line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
-                              @"adm_use",
-                              @"asset_number",
+            NSString *line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+                              @"serial_number",
+                              @"asset_tag",
                               @"building",
-                              @"computer",
-                              @"cpu",
+                              @"room",
                               @"device_type",
-                              @"funding",
-                              @"hd",
-                              @"inst_use",
+                              @"device_brand",
+                              @"device_model",
                               @"os",
-                              @"ram",
-                              @"serial",
-                              @"stu_use",
-                              @"tchr_use",
-                              @"room"];
+                              @"cpu_MHZ",
+                              @"ram_mem",
+                              @"hd_size",
+                              @"funding",
+                              @"admin_access",
+                              @"teacher_access",
+                              @"student_access",
+                              @"instructional_access"];
             NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
             NSString *file = [path stringByAppendingPathComponent:@"inventory.csv"];
             [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
@@ -72,22 +73,23 @@
             [fileHandle writeData:[line dataUsingEncoding:NSUTF8StringEncoding]];
             for (PFObject *object in objects) {
                 //NSLog(@"%@", object.objectId);
-                line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
-                        object[@"adm"],
-                        object[@"asset"],
+                line = [NSString stringWithFormat:@"%@,%@,%@,\"%@\",%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+                        object[@"serial_number"],
+                        object[@"asset_tag"],
                         object[@"building"],
-                        object[@"computer"],
-                        object[@"cpu"],
+                        object[@"room"],
                         object[@"device_type"],
-                        object[@"funding"],
-                        object[@"hd"],
-                        object[@"inst"],
+                        object[@"device_brand"],
+                        object[@"device_model"],
                         object[@"os"],
-                        object[@"ram"],
-                        object[@"serial"],
-                        object[@"stu"],
-                        object[@"tchr"],
-                        object[@"teacher"]];
+                        object[@"cpu_MHZ"],
+                        object[@"ram_mem"],
+                        object[@"hd_size"],
+                        object[@"funding"],
+                        object[@"admin_access"],
+                        object[@"teacher_access"],
+                        object[@"student_access"],
+                        object[@"instructional_access"]];
                 //NSLog(@"%@", line);
                 [fileHandle writeData:[line dataUsingEncoding:NSUTF8StringEncoding]];
             }
