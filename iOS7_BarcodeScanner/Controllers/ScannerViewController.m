@@ -211,20 +211,20 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     // Charles Riley
     if (!self->alertShowing) {
         self->alertShowing = true;
-        PFQuery *query = [PFQuery queryWithClassName:@"practice"];
-        [query whereKey:@"serial" equalTo:barcode.getBarcodeData];
+        PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
+        [query whereKey:@"serial_number" equalTo:barcode.getBarcodeData];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if (!error) {
                 // barcode found
                 NSLog(@"Found barcode %@.\n", barcode.getBarcodeData);
-                object[@"serial"] = barcode.getBarcodeData;
+                object[@"serial_number"] = barcode.getBarcodeData;
                 [object saveInBackground];
-                [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"teacher"]];
+                [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"room"]];
             } else {
                 // barcode not found
                 NSLog(@"Barcode not found %@.\n", barcode.getBarcodeData);
-                //PFObject *object = [PFObject objectWithClassName:@"practice"];
-                //object[@"serial"] = barcode.getBarcodeData;
+                //PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
+                //object[@"serial_number"] = barcode.getBarcodeData;
                 //[object saveInBackground];
                 [self showBarcodeAlert:barcode barcodeFound:NO inRoom:nil];
             }
