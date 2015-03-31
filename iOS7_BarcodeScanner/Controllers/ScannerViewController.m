@@ -217,7 +217,9 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
             if (!error) {
                 // barcode found
                 NSLog(@"Found barcode %@.\n", barcode.getBarcodeData);
-                object[@"serial_number"] = barcode.getBarcodeData;
+                NSDate *date = [NSDate date];
+                object[@"lastScanned"] = date;
+                //object[@"serial_number"] = barcode.getBarcodeData;
                 [object saveInBackground];
                 [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"room"]];
             } else {
