@@ -32,8 +32,6 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.filenameTextField resignFirstResponder];
-    [self.buildingTextField resignFirstResponder];
-    [self.deviceTextField resignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
