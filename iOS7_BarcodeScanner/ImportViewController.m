@@ -10,8 +10,6 @@
 
 @interface ImportViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *filenameTextField;
-@property (weak, nonatomic) IBOutlet UITextField *buildingTextField;
-@property (weak, nonatomic) IBOutlet UITextField *deviceTextField;
 
 @end
 
