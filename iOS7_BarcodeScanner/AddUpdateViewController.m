@@ -41,8 +41,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)submitButtonPressed:(id)sender {
+- (IBAction)submitPressed:(id)sender {
 }
+
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.barcodeTextField resignFirstResponder];
