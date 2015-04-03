@@ -272,9 +272,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D41746981837E91900F83533 /* iOS7_BarcodeScanner */ = {
+		D41746981837E91900F83533 /* PCSInventory */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D41746CE1837E91900F83533 /* Build configuration list for PBXNativeTarget "iOS7_BarcodeScanner" */;
+			buildConfigurationList = D41746CE1837E91900F83533 /* Build configuration list for PBXNativeTarget "PCSInventory" */;
 			buildPhases = (
 				D41746951837E91900F83533 /* Sources */,
 				D41746961837E91900F83533 /* Frameworks */,
@@ -284,7 +284,7 @@
 			);
 			dependencies = (
 			);
-			name = iOS7_BarcodeScanner;
+			name = PCSInventory;
 			productName = iOS7_BarcodeScanner;
 			productReference = D41746991837E91900F83533 /* iOS7_BarcodeScanner.app */;
 			productType = "com.apple.product-type.application";
@@ -337,7 +337,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D41746981837E91900F83533 /* iOS7_BarcodeScanner */,
+				D41746981837E91900F83533 /* PCSInventory */,
 				D41746BC1837E91900F83533 /* iOS7_BarcodeScannerTests */,
 			);
 		};
@@ -397,7 +397,7 @@
 /* Begin PBXTargetDependency section */
 		D41746C31837E91900F83533 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D41746981837E91900F83533 /* iOS7_BarcodeScanner */;
+			target = D41746981837E91900F83533 /* PCSInventory */;
 			targetProxy = D41746C21837E91900F83533 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -606,7 +606,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D41746CE1837E91900F83533 /* Build configuration list for PBXNativeTarget "iOS7_BarcodeScanner" */ = {
+		D41746CE1837E91900F83533 /* Build configuration list for PBXNativeTarget "PCSInventory" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D41746CF1837E91900F83533 /* Debug */,
