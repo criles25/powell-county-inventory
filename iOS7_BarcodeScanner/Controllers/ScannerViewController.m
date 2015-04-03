@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Jake Widmer. All rights reserved.
 //
 
-#import <Parse/Parse.h>
-
 #import "ScannerViewController.h"
 #import "SettingsViewController.h"
 #import "Barcode.h"
@@ -221,6 +219,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                 object[@"lastScanned"] = date;
                 //object[@"serial_number"] = barcode.getBarcodeData;
                 [object saveInBackground];
+                self.objectLastScanned = object;
                 [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"room"]];
             } else {
                 // barcode not found
@@ -228,6 +227,10 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                 //PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
                 //object[@"serial_number"] = barcode.getBarcodeData;
                 //[object saveInBackground];
+                self.objectLastScanned = [PFObject objectWithClassName:@"DeviceInventory"];
+                NSDate *date = [NSDate date];
+                self.objectLastScanned[@"serial_number"] = barcode.getBarcodeData;
+                self.objectLastScanned[@"lastScanned"] = date;
                 [self showBarcodeAlert:barcode barcodeFound:NO inRoom:nil];
             }
         }];

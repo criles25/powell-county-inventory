@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "SettingsViewController.h"
+#import <Parse/Parse.h>
+
 @interface ScannerViewController : UIViewController<UIAlertViewDelegate, SettingsDelegate>
 @property (strong, nonatomic) NSMutableArray * allowedBarcodeTypes;
-
+@property (strong, nonatomic) PFObject *objectLastScanned;
 @end

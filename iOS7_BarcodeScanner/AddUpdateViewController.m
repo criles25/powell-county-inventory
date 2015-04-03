@@ -26,7 +26,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *studentAccessTextField;
 @property (weak, nonatomic) IBOutlet UITextField *instructionalAccessTextField;
 
-
 @end
 
 @implementation AddUpdateViewController
@@ -43,7 +42,6 @@
 
 - (IBAction)submitPressed:(id)sender {
 }
-
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.barcodeTextField resignFirstResponder];

@@ -7,6 +7,7 @@
 //
 
 #import "PowellCountyInventoryViewController.h"
+#import "ScannerViewController.h"
 
 @interface PowellCountyInventoryViewController ()
 
@@ -25,7 +26,9 @@
 }
 
 - (IBAction)unwindToPCInventory:(UIStoryboardSegue *)segue {
-    
+    ScannerViewController *source = [segue sourceViewController];
+    self.objectLastScanned = source.objectLastScanned;
+    NSLog(@"Barcode in unwind method %@.\n", self.objectLastScanned[@"serial_number"]);
 }
 
 
