@@ -134,16 +134,24 @@
                     object[@"funding"] = self.fundingTextField.text;
                 }
                 if (self.adminAccessTextField.text.length > 0) {
-                    object[@"admin_access"] = self.adminAccessTextField.text;
+                    bool boolean = [self.adminAccessTextField.text boolValue];
+                    NSNumber *number = [NSNumber numberWithBool:boolean];
+                    object[@"admin_access"] = number;
                 }
                 if (self.teacherAccessTextField.text.length > 0) {
-                    object[@"teacher_access"] = self.teacherAccessTextField.text;
+                    bool boolean = [self.teacherAccessTextField.text boolValue];
+                    NSNumber *number = [NSNumber numberWithBool:boolean];
+                    object[@"teacher_access"] = number;
                 }
                 if (self.studentAccessTextField.text.length > 0) {
-                    object[@"student_access"] = self.studentAccessTextField.text;
+                    bool boolean = [self.studentAccessTextField.text boolValue];
+                    NSNumber *number = [NSNumber numberWithBool:boolean];
+                    object[@"student_access"] = number;
                 }
                 if (self.instructionalAccessTextField.text.length > 0) {
-                    object[@"instructional_access"] = self.instructionalAccessTextField.text;
+                    bool boolean = [self.instructionalAccessTextField.text boolValue];
+                    NSNumber *number = [NSNumber numberWithBool:boolean];
+                    object[@"instructional_access"] = number;
                 }
                 if (self.txtFieldBranchYear.text.length > 0) {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -199,16 +207,24 @@
                     object[@"funding"] = self.fundingTextField.text;
                 }
                 if (self.adminAccessTextField.text.length > 0) {
-                    object[@"admin_access"] = self.adminAccessTextField.text;
+                    bool boolean = [self.adminAccessTextField.text boolValue];
+                    NSNumber *number = [NSNumber numberWithBool:boolean];
+                    object[@"admin_access"] = number;
                 }
                 if (self.teacherAccessTextField.text.length > 0) {
-                    object[@"teacher_access"] = self.teacherAccessTextField.text;
+                    bool boolean = [self.teacherAccessTextField.text boolValue];
+                    NSNumber *number = [NSNumber numberWithBool:boolean];
+                    object[@"teacher_access"] = number;
                 }
                 if (self.studentAccessTextField.text.length > 0) {
-                    object[@"student_access"] = self.studentAccessTextField.text;
+                    bool boolean = [self.studentAccessTextField.text boolValue];
+                    NSNumber *number = [NSNumber numberWithBool:boolean];
+                    object[@"student_access"] = number;
                 }
                 if (self.instructionalAccessTextField.text.length > 0) {
-                    object[@"instructional_access"] = self.instructionalAccessTextField.text;
+                    bool boolean = [self.instructionalAccessTextField.text boolValue];
+                    NSNumber *number = [NSNumber numberWithBool:boolean];
+                    object[@"instructional_access"] = number;
                 }
                 if (self.txtFieldBranchYear.text.length > 0) {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
