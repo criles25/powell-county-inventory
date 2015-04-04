@@ -499,7 +499,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="75" id="YXc-hV-MDL"/>
                                                 </constraints>
-                                                <string key="text">Enter the barcode of the device you want added or updated, and the fields you want changed. A blank field will be left unchanged.</string>
+                                                <string key="text">Enter the barcode of the device you want added or updated, and the fields you want changed. A blank field will be left unchanged. Enter 'yes' or 'no' to change access fields.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
