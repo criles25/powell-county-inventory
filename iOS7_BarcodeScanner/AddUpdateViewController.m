@@ -26,6 +26,10 @@
 @property (weak, nonatomic) IBOutlet UITextField *teacherAccessTextField;
 @property (weak, nonatomic) IBOutlet UITextField *studentAccessTextField;
 @property (weak, nonatomic) IBOutlet UITextField *instructionalAccessTextField;
+@property (weak, nonatomic) IBOutlet UITextField *txtFieldBranchYear;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+
 
 @end
 
@@ -34,6 +38,49 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    // setup scroll view
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapGestureCaptured:)];
+    [self.scrollView addGestureRecognizer:singleTap];
+    // setup last found textfield
+    UIDatePicker *datePicker = [[UIDatePicker alloc]init];
+    [datePicker setDate:[NSDate date]];
+    datePicker.datePickerMode = UIDatePickerModeDate;
+    [datePicker addTarget:self action:@selector(dateTextField:) forControlEvents:UIControlEventValueChanged];
+    [self.txtFieldBranchYear setInputView:datePicker];
+}
+
+- (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
+{
+    // hide keyboard
+    [self.barcodeTextField resignFirstResponder];
+    [self.assetTextField resignFirstResponder];
+    [self.buildingTextField resignFirstResponder];
+    [self.roomTextField resignFirstResponder];
+    [self.deviceTypeTextField resignFirstResponder];
+    [self.brandTextField resignFirstResponder];
+    [self.modelTextField resignFirstResponder];
+    [self.operatingSystemTextField resignFirstResponder];
+    [self.cpuTextField resignFirstResponder];
+    [self.ramTextField resignFirstResponder];
+    [self.harddriveTextField resignFirstResponder];
+    [self.fundingTextField resignFirstResponder];
+    [self.adminAccessTextField resignFirstResponder];
+    [self.teacherAccessTextField resignFirstResponder];
+    [self.studentAccessTextField resignFirstResponder];
+    [self.instructionalAccessTextField resignFirstResponder];
+    [self.txtFieldBranchYear resignFirstResponder];
+}
+
+-(void) dateTextField:(id)sender
+{
+    UIDatePicker *picker = (UIDatePicker*)self.txtFieldBranchYear.inputView;
+    [picker setMaximumDate:[NSDate date]];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    NSDate *eventDate = picker.date;
+    [dateFormat setDateFormat:@"dd/MM/yyyy"];
+    
+    NSString *dateString = [dateFormat stringFromDate:eventDate];
+    self.txtFieldBranchYear.text = [NSString stringWithFormat:@"%@",dateString];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -96,6 +143,9 @@
                 if (self.instructionalAccessTextField.text.length > 0) {
                     object[@"instructional_access"] = self.instructionalAccessTextField.text;
                 }
+                if (self.txtFieldBranchYear.text.length > 0) {
+                    object[@"lastScanned"] = self.txtFieldBranchYear.text;
+                }
                 [object saveInBackground];
                 //[self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"room"]];
             } else {
@@ -107,78 +157,53 @@
                 //object[@"lastScanned"] = date;
                 if (self.assetTextField.text.length > 0) {
                     object[@"asset_tag"] = self.assetTextField.text;
-                } else {
-                    object[@"asset_tag"] = @"not defined";
                 }
                 if (self.buildingTextField.text.length > 0) {
                     object[@"building"] = self.buildingTextField.text;
-                } else {
-                    object[@"building"] = @"not defined";
                 }
                 if (self.roomTextField.text.length > 0) {
                     object[@"room"] = self.roomTextField.text;
                 } else {
-                    object[@"room"] = @"not defined";
+                    object[@"room"] = @"undefined";
                 }
                 if (self.deviceTypeTextField.text.length > 0) {
                     object[@"device_type"] = self.deviceTypeTextField.text;
-                } else {
-                    object[@"device_type"] = @"not defined";
                 }
                 if (self.brandTextField.text.length > 0) {
                     object[@"device_brand"] = self.brandTextField.text;
-                } else {
-                    object[@"device_brand"] = @"not defined";
                 }
                 if (self.modelTextField.text.length > 0) {
                     object[@"device_model"] = self.modelTextField.text;
-                } else {
-                    object[@"device_model"] = @"not defined";
                 }
                 if (self.operatingSystemTextField.text.length > 0) {
                     object[@"os"] = self.operatingSystemTextField.text;
-                } else {
-                    object[@"os"] = @"not defined";
                 }
                 if (self.cpuTextField.text.length > 0) {
                     object[@"cpu_MHZ"] = self.cpuTextField.text;
-                } else {
-                    object[@"cpu_MHZ"] = @"not defined";
                 }
                 if (self.ramTextField.text.length > 0) {
                     object[@"ram_mem"] = self.ramTextField.text;
-                } else {
-                    object[@"ram_mem"] = @"not defined";
                 }
                 if (self.harddriveTextField.text.length > 0) {
                     object[@"hd_size"] = self.harddriveTextField.text;
-                } else {
-                    object[@"hd_size"] = @"not defined";
                 }
                 if (self.fundingTextField.text.length > 0) {
                     object[@"funding"] = self.fundingTextField.text;
-                } else {
-                    object[@"funding"] = @"not defined";
                 }
                 if (self.adminAccessTextField.text.length > 0) {
                     object[@"admin_access"] = self.adminAccessTextField.text;
-                } else {
-                    object[@"admin_access"] = false; // check that this works
                 }
                 if (self.teacherAccessTextField.text.length > 0) {
                     object[@"teacher_access"] = self.teacherAccessTextField.text;
-                } else {
-                    object[@"teacher_access"] = false; // same
                 }
                 if (self.studentAccessTextField.text.length > 0) {
                     object[@"student_access"] = self.studentAccessTextField.text;
-                } else {
-                    object[@"student_access"] = false; // sa,e
                 }
                 if (self.instructionalAccessTextField.text.length > 0) {
                     object[@"instructional_access"] = self.instructionalAccessTextField.text;
-                } else {
-                    object[@"instructional_access"] = false; // same again
+                }
+                if (self.txtFieldBranchYear.text.length > 0) {
+                    object[@"lastScanned"] = self.txtFieldBranchYear.text;
                 }
                 [object saveInBackground];
                 //[self showBarcodeAlert:barcode barcodeFound:NO inRoom:nil];
@@ -186,25 +211,6 @@
         }];
     }
     
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self.barcodeTextField resignFirstResponder];
-    [self.assetTextField resignFirstResponder];
-    [self.buildingTextField resignFirstResponder];
-    [self.roomTextField resignFirstResponder];
-    [self.deviceTypeTextField resignFirstResponder];
-    [self.brandTextField resignFirstResponder];
-    [self.modelTextField resignFirstResponder];
-    [self.operatingSystemTextField resignFirstResponder];
-    [self.cpuTextField resignFirstResponder];
-    [self.ramTextField resignFirstResponder];
-    [self.harddriveTextField resignFirstResponder];
-    [self.fundingTextField resignFirstResponder];
-    [self.adminAccessTextField resignFirstResponder];
-    [self.teacherAccessTextField resignFirstResponder];
-    [self.studentAccessTextField resignFirstResponder];
-    [self.instructionalAccessTextField resignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
