@@ -37,7 +37,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     // setup scroll view
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapGestureCaptured:)];
     [self.scrollView addGestureRecognizer:singleTap];
@@ -73,13 +72,16 @@
 
 -(void) dateTextField:(id)sender
 {
-    UIDatePicker *picker = (UIDatePicker*)self.txtFieldBranchYear.inputView;
-    [picker setMaximumDate:[NSDate date]];
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    NSDate *eventDate = picker.date;
-    [dateFormat setDateFormat:@"dd/MM/yyyy"];
     
-    NSString *dateString = [dateFormat stringFromDate:eventDate];
+    //[picker setMaximumDate:[NSDate date]];
+    //NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    //[dateFormat setDateFormat:@"dd/MM/yyyy"];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    UIDatePicker *picker = (UIDatePicker*)self.txtFieldBranchYear.inputView;
+    NSDate *eventDate = picker.date;
+    NSString *dateString = [formatter stringFromDate:eventDate];
     self.txtFieldBranchYear.text = [NSString stringWithFormat:@"%@",dateString];
 }
 
@@ -144,7 +146,13 @@
                     object[@"instructional_access"] = self.instructionalAccessTextField.text;
                 }
                 if (self.txtFieldBranchYear.text.length > 0) {
-                    object[@"lastScanned"] = self.txtFieldBranchYear.text;
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                    NSDate *date = [[NSDate alloc] init];
+                    date = [formatter dateFromString:self.txtFieldBranchYear.text];
+                    object[@"lastScanned"] = date;
+                    //NSLog(@"%@\n", date);
                 }
                 [object saveInBackground];
                 //[self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"room"]];
@@ -203,7 +211,13 @@
                     object[@"instructional_access"] = self.instructionalAccessTextField.text;
                 }
                 if (self.txtFieldBranchYear.text.length > 0) {
-                    object[@"lastScanned"] = self.txtFieldBranchYear.text;
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                    NSDate *date = [[NSDate alloc] init];
+                    date = [formatter dateFromString:self.txtFieldBranchYear.text];
+                    object[@"lastScanned"] = date;
+                    //NSLog(@"%@\n", date);
                 }
                 [object saveInBackground];
                 //[self showBarcodeAlert:barcode barcodeFound:NO inRoom:nil];
