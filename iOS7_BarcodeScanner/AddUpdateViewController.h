@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
 @interface AddUpdateViewController : UIViewController
-
+-(void)setFields:(PFObject *)object;
 @end

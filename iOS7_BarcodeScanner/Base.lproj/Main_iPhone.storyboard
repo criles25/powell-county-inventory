@@ -44,11 +44,10 @@
                     <connections>
                         <outlet property="previewView" destination="Kzv-Hc-8xc" id="6JX-qW-DaD"/>
                         <segue destination="gEc-G3-wJU" kind="push" identifier="toSettings" id="qWT-cn-79S"/>
-                        <segue destination="WlI-Rz-N6Y" kind="unwind" identifier="unwindToPCInventory" unwindAction="unwindToPCInventory:" id="DKi-qc-5VT"/>
+                        <segue destination="BX5-uR-bd4" kind="push" identifier="pushToAdd" id="9RN-iE-c1Y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
-                <exit id="WlI-Rz-N6Y" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1269" y="62"/>
         </scene>
@@ -841,4 +840,7 @@ CA
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="9RN-iE-c1Y"/>
+    </inferredMetricsTieBreakers>
 </document>

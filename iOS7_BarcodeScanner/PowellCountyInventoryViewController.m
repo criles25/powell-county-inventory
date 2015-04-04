@@ -7,7 +7,7 @@
 //
 
 #import "PowellCountyInventoryViewController.h"
-#import "ScannerViewController.h"
+//#import "ScannerViewController.h"
 
 @interface PowellCountyInventoryViewController ()
 
@@ -24,13 +24,13 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+/*
 - (IBAction)unwindToPCInventory:(UIStoryboardSegue *)segue {
     ScannerViewController *source = [segue sourceViewController];
     self.objectLastScanned = source.objectLastScanned;
     NSLog(@"Barcode in unwind method %@.\n", self.objectLastScanned[@"serial_number"]);
 }
-
+*/
 
 /*
 #pragma mark - Navigation

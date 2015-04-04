@@ -8,6 +8,8 @@
 
 #import "AddUpdateViewController.h"
 #import <Parse/Parse.h>
+#import "ScannerViewController.h"
+#define NSStringFromBOOL(aBOOL)    aBOOL? @"YES" : @"NO"
 
 @interface AddUpdateViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *barcodeTextField;
@@ -33,7 +35,9 @@
 
 @end
 
-@implementation AddUpdateViewController
+@implementation AddUpdateViewController {
+    PFObject *objectLastScanned;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,8 +50,42 @@
     datePicker.datePickerMode = UIDatePickerModeDate;
     [datePicker addTarget:self action:@selector(dateTextField:) forControlEvents:UIControlEventValueChanged];
     [self.txtFieldBranchYear setInputView:datePicker];
+    // setup segue from scanner
+    self.barcodeTextField.text = objectLastScanned[@"serial_number"];
+    self.assetTextField.text = objectLastScanned[@"asset_tag"];
+    self.buildingTextField.text = objectLastScanned[@"building"];
+    self.roomTextField.text = objectLastScanned[@"room"];
+    self.deviceTypeTextField.text = objectLastScanned[@"device_type"];
+    self.brandTextField.text = objectLastScanned[@"device_brand"];
+    self.modelTextField.text = objectLastScanned[@"device_model"];
+    self.operatingSystemTextField.text = objectLastScanned[@"os"];
+    self.cpuTextField.text = objectLastScanned[@"cpu_MHZ"];
+    self.ramTextField.text = objectLastScanned[@"ram_mem"];
+    self.harddriveTextField.text = objectLastScanned[@"hd_size"];
+    self.fundingTextField.text = objectLastScanned[@"funding"];
+    if ([objectLastScanned objectForKey:@"admin_access"]) {
+        self.adminAccessTextField.text = NSStringFromBOOL(objectLastScanned[@"admin_access"]);
+    }
+    if ([objectLastScanned objectForKey:@"teacher_access"]) {
+        self.teacherAccessTextField.text = NSStringFromBOOL(objectLastScanned[@"teacher_access"]);
+    }
+    if ([objectLastScanned objectForKey:@"student_access"]) {
+        self.studentAccessTextField.text = NSStringFromBOOL(objectLastScanned[@"student_access"]);
+    }
+    if ([objectLastScanned objectForKey:@"instructional_access"]) {
+        self.instructionalAccessTextField.text = NSStringFromBOOL(objectLastScanned[@"instructional_access"]);
+    }
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    //NSDate *date = objectLastScanned[@"lastScanned"];
+    
+    self.txtFieldBranchYear.text = [formatter stringFromDate:objectLastScanned[@"lastScanned"]];
 }
 
+-(void)setFields:(PFObject *)object; {
+    self->objectLastScanned = object;
+}
 - (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
 {
     // hide keyboard

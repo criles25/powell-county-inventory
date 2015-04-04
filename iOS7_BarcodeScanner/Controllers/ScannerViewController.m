@@ -9,6 +9,8 @@
 #import "ScannerViewController.h"
 #import "SettingsViewController.h"
 #import "Barcode.h"
+#import "AddUpdateViewController.h"
+
 @import AVFoundation;   // iOS7 only import style
 
 @interface ScannerViewController ()
@@ -168,6 +170,10 @@
         self.settingsVC = segue.destinationViewController;
         self.settingsVC.delegate = self;
     }
+    if ([[segue identifier] isEqualToString:@"pushToAdd"]) {
+        AddUpdateViewController *vc = [segue destinationViewController];
+        [vc setFields:self.objectLastScanned];
+    }
 }
 
 
@@ -305,7 +311,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     if(buttonIndex == 0){
         // Code for Add/Update button
         self->alertShowing = false;
-        [self performSegueWithIdentifier:@"unwindToPCInventory" sender:self];
+        [self performSegueWithIdentifier:@"pushToAdd" sender:self];
     }
     if(buttonIndex == 1){
         // Code for Scan more button
