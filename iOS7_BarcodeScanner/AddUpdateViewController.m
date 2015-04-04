@@ -91,100 +91,199 @@
 }
 
 - (IBAction)submitPressed:(id)sender {
-    // add if statements for checking fields have correct format
-    if (self.barcodeTextField.text.length > 0) {
-        // query parse
-        PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
-        [query whereKey:@"serial_number" equalTo:self.barcodeTextField.text];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            if (!error) {
-                // barcode found
-                NSLog(@"Found barcode %@.\n", self.barcodeTextField.text);
-                bool update = false;
-                if (self.assetTextField.text.length > 0) {
-                    update = true;
-                    object[@"asset_tag"] = self.assetTextField.text;
-                }
-                if (self.buildingTextField.text.length > 0) {
-                    update = true;
-                    object[@"building"] = self.buildingTextField.text;
-                }
-                if (self.roomTextField.text.length > 0) {
-                    update = true;
-                    object[@"room"] = self.roomTextField.text;
-                }
-                if (self.deviceTypeTextField.text.length > 0) {
-                    update = true;
-                    object[@"device_type"] = self.deviceTypeTextField.text;
-                }
-                if (self.brandTextField.text.length > 0) {
-                    update = true;
-                    object[@"device_brand"] = self.brandTextField.text;
-                }
-                if (self.modelTextField.text.length > 0) {
-                    update = true;
-                    object[@"device_model"] = self.modelTextField.text;
-                }
-                if (self.operatingSystemTextField.text.length > 0) {
-                    update = true;
-                    object[@"os"] = self.operatingSystemTextField.text;
-                }
-                if (self.cpuTextField.text.length > 0) {
-                    update = true;
-                    object[@"cpu_MHZ"] = self.cpuTextField.text;
-                }
-                if (self.ramTextField.text.length > 0) {
-                    update = true;
-                    object[@"ram_mem"] = self.ramTextField.text;
-                }
-                if (self.harddriveTextField.text.length > 0) {
-                    update = true;
-                    object[@"hd_size"] = self.harddriveTextField.text;
-                }
-                if (self.fundingTextField.text.length > 0) {
-                    update = true;
-                    object[@"funding"] = self.fundingTextField.text;
-                }
-                if (self.adminAccessTextField.text.length > 0) {
-                    update = true;
-                    bool boolean = [self.adminAccessTextField.text boolValue];
-                    NSNumber *number = [NSNumber numberWithBool:boolean];
-                    object[@"admin_access"] = number;
-                }
-                if (self.teacherAccessTextField.text.length > 0) {
-                    update = true;
-                    bool boolean = [self.teacherAccessTextField.text boolValue];
-                    NSNumber *number = [NSNumber numberWithBool:boolean];
-                    object[@"teacher_access"] = number;
-                }
-                if (self.studentAccessTextField.text.length > 0) {
-                    update = true;
-                    bool boolean = [self.studentAccessTextField.text boolValue];
-                    NSNumber *number = [NSNumber numberWithBool:boolean];
-                    object[@"student_access"] = number;
-                }
-                if (self.instructionalAccessTextField.text.length > 0) {
-                    update = true;
-                    bool boolean = [self.instructionalAccessTextField.text boolValue];
-                    NSNumber *number = [NSNumber numberWithBool:boolean];
-                    object[@"instructional_access"] = number;
-                }
-                if (self.txtFieldBranchYear.text.length > 0) {
-                    update = true;
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
-                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
-                    NSDate *date = [[NSDate alloc] init];
-                    date = [formatter dateFromString:self.txtFieldBranchYear.text];
-                    object[@"lastScanned"] = date;
-                    //NSLog(@"%@\n", date);
-                }
-                if (update) {
+    // lock
+    @synchronized(self) {
+        // barcode entered
+        if (self.barcodeTextField.text.length > 0) {
+            // query parse
+            PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
+            [query whereKey:@"serial_number" equalTo:self.barcodeTextField.text];
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                if (!error) {
+                    // barcode found
+                    NSLog(@"Found barcode %@.\n", self.barcodeTextField.text);
+                    bool update = false;
+                    if (self.assetTextField.text.length > 0) {
+                        update = true;
+                        object[@"asset_tag"] = self.assetTextField.text;
+                    }
+                    if (self.buildingTextField.text.length > 0) {
+                        update = true;
+                        object[@"building"] = self.buildingTextField.text;
+                    }
+                    if (self.roomTextField.text.length > 0) {
+                        update = true;
+                        object[@"room"] = self.roomTextField.text;
+                    }
+                    if (self.deviceTypeTextField.text.length > 0) {
+                        update = true;
+                        object[@"device_type"] = self.deviceTypeTextField.text;
+                    }
+                    if (self.brandTextField.text.length > 0) {
+                        update = true;
+                        object[@"device_brand"] = self.brandTextField.text;
+                    }
+                    if (self.modelTextField.text.length > 0) {
+                        update = true;
+                        object[@"device_model"] = self.modelTextField.text;
+                    }
+                    if (self.operatingSystemTextField.text.length > 0) {
+                        update = true;
+                        object[@"os"] = self.operatingSystemTextField.text;
+                    }
+                    if (self.cpuTextField.text.length > 0) {
+                        update = true;
+                        object[@"cpu_MHZ"] = self.cpuTextField.text;
+                    }
+                    if (self.ramTextField.text.length > 0) {
+                        update = true;
+                        object[@"ram_mem"] = self.ramTextField.text;
+                    }
+                    if (self.harddriveTextField.text.length > 0) {
+                        update = true;
+                        object[@"hd_size"] = self.harddriveTextField.text;
+                    }
+                    if (self.fundingTextField.text.length > 0) {
+                        update = true;
+                        object[@"funding"] = self.fundingTextField.text;
+                    }
+                    if (self.adminAccessTextField.text.length > 0) {
+                        update = true;
+                        bool boolean = [self.adminAccessTextField.text boolValue];
+                        NSNumber *number = [NSNumber numberWithBool:boolean];
+                        object[@"admin_access"] = number;
+                    }
+                    if (self.teacherAccessTextField.text.length > 0) {
+                        update = true;
+                        bool boolean = [self.teacherAccessTextField.text boolValue];
+                        NSNumber *number = [NSNumber numberWithBool:boolean];
+                        object[@"teacher_access"] = number;
+                    }
+                    if (self.studentAccessTextField.text.length > 0) {
+                        update = true;
+                        bool boolean = [self.studentAccessTextField.text boolValue];
+                        NSNumber *number = [NSNumber numberWithBool:boolean];
+                        object[@"student_access"] = number;
+                    }
+                    if (self.instructionalAccessTextField.text.length > 0) {
+                        update = true;
+                        bool boolean = [self.instructionalAccessTextField.text boolValue];
+                        NSNumber *number = [NSNumber numberWithBool:boolean];
+                        object[@"instructional_access"] = number;
+                    }
+                    if (self.txtFieldBranchYear.text.length > 0) {
+                        update = true;
+                        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                        [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+                        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                        NSDate *date = [[NSDate alloc] init];
+                        date = [formatter dateFromString:self.txtFieldBranchYear.text];
+                        object[@"lastScanned"] = date;
+                        //NSLog(@"%@\n", date);
+                    }
+                    if (update) {
+                        [object saveInBackground];
+                        NSString *string = @"You successfully updated the values for device with barcode ";
+                        NSString *append = self.barcodeTextField.text;
+                        NSString *message = [string stringByAppendingString:append];
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Updated!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        self.barcodeTextField.text = @"";
+                        self.assetTextField.text = @"";
+                        self.buildingTextField.text = @"";
+                        self.roomTextField.text = @"";
+                        self.deviceTypeTextField.text = @"";
+                        self.brandTextField.text = @"";
+                        self.modelTextField.text = @"";
+                        self.operatingSystemTextField.text = @"";
+                        self.cpuTextField.text = @"";
+                        self.ramTextField.text = @"";
+                        self.harddriveTextField.text = @"";
+                        self.fundingTextField.text = @"";
+                        self.adminAccessTextField.text = @"";
+                        self.teacherAccessTextField.text = @"";
+                        self.studentAccessTextField.text = @"";
+                        self.instructionalAccessTextField.text = @"";
+                        self.txtFieldBranchYear.text = @"";
+                        [alert show];
+                    } else {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Empty Fields!" message:@"Enter a value into a field to change its value" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [alert show];
+                    }
+                    
+                } else {
+                    // barcode not found
+                    NSLog(@"Barcode not found %@.\n", self.barcodeTextField.text);
+                    PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
+                    object[@"serial_number"] = self.barcodeTextField.text;
+                    if (self.assetTextField.text.length > 0) {
+                        object[@"asset_tag"] = self.assetTextField.text;
+                    }
+                    if (self.buildingTextField.text.length > 0) {
+                        object[@"building"] = self.buildingTextField.text;
+                    }
+                    if (self.roomTextField.text.length > 0) {
+                        object[@"room"] = self.roomTextField.text;
+                    } else {
+                        object[@"room"] = @"undefined";
+                    }
+                    if (self.deviceTypeTextField.text.length > 0) {
+                        object[@"device_type"] = self.deviceTypeTextField.text;
+                    }
+                    if (self.brandTextField.text.length > 0) {
+                        object[@"device_brand"] = self.brandTextField.text;
+                    }
+                    if (self.modelTextField.text.length > 0) {
+                        object[@"device_model"] = self.modelTextField.text;
+                    }
+                    if (self.operatingSystemTextField.text.length > 0) {
+                        object[@"os"] = self.operatingSystemTextField.text;
+                    }
+                    if (self.cpuTextField.text.length > 0) {
+                        object[@"cpu_MHZ"] = self.cpuTextField.text;
+                    }
+                    if (self.ramTextField.text.length > 0) {
+                        object[@"ram_mem"] = self.ramTextField.text;
+                    }
+                    if (self.harddriveTextField.text.length > 0) {
+                        object[@"hd_size"] = self.harddriveTextField.text;
+                    }
+                    if (self.fundingTextField.text.length > 0) {
+                        object[@"funding"] = self.fundingTextField.text;
+                    }
+                    if (self.adminAccessTextField.text.length > 0) {
+                        bool boolean = [self.adminAccessTextField.text boolValue];
+                        NSNumber *number = [NSNumber numberWithBool:boolean];
+                        object[@"admin_access"] = number;
+                    }
+                    if (self.teacherAccessTextField.text.length > 0) {
+                        bool boolean = [self.teacherAccessTextField.text boolValue];
+                        NSNumber *number = [NSNumber numberWithBool:boolean];
+                        object[@"teacher_access"] = number;
+                    }
+                    if (self.studentAccessTextField.text.length > 0) {
+                        bool boolean = [self.studentAccessTextField.text boolValue];
+                        NSNumber *number = [NSNumber numberWithBool:boolean];
+                        object[@"student_access"] = number;
+                    }
+                    if (self.instructionalAccessTextField.text.length > 0) {
+                        bool boolean = [self.instructionalAccessTextField.text boolValue];
+                        NSNumber *number = [NSNumber numberWithBool:boolean];
+                        object[@"instructional_access"] = number;
+                    }
+                    if (self.txtFieldBranchYear.text.length > 0) {
+                        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                        [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+                        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                        NSDate *date = [[NSDate alloc] init];
+                        date = [formatter dateFromString:self.txtFieldBranchYear.text];
+                        object[@"lastScanned"] = date;
+                        //NSLog(@"%@\n", date);
+                    }
                     [object saveInBackground];
-                    NSString *string = @"You successfully updated the values for device with barcode ";
+                    NSString *string = @"You successfully added the device with barcode ";
                     NSString *append = self.barcodeTextField.text;
                     NSString *message = [string stringByAppendingString:append];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Updated!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Added!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     self.barcodeTextField.text = @"";
                     self.assetTextField.text = @"";
                     self.buildingTextField.text = @"";
@@ -203,106 +302,11 @@
                     self.instructionalAccessTextField.text = @"";
                     self.txtFieldBranchYear.text = @"";
                     [alert show];
-                } else {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Empty Fields!" message:@"Enter a value into a field to change its value" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [alert show];
                 }
-                
-            } else {
-                // barcode not found
-                NSLog(@"Barcode not found %@.\n", self.barcodeTextField.text);
-                PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
-                object[@"serial_number"] = self.barcodeTextField.text;
-                if (self.assetTextField.text.length > 0) {
-                    object[@"asset_tag"] = self.assetTextField.text;
-                }
-                if (self.buildingTextField.text.length > 0) {
-                    object[@"building"] = self.buildingTextField.text;
-                }
-                if (self.roomTextField.text.length > 0) {
-                    object[@"room"] = self.roomTextField.text;
-                } else {
-                    object[@"room"] = @"undefined";
-                }
-                if (self.deviceTypeTextField.text.length > 0) {
-                    object[@"device_type"] = self.deviceTypeTextField.text;
-                }
-                if (self.brandTextField.text.length > 0) {
-                    object[@"device_brand"] = self.brandTextField.text;
-                }
-                if (self.modelTextField.text.length > 0) {
-                    object[@"device_model"] = self.modelTextField.text;
-                }
-                if (self.operatingSystemTextField.text.length > 0) {
-                    object[@"os"] = self.operatingSystemTextField.text;
-                }
-                if (self.cpuTextField.text.length > 0) {
-                    object[@"cpu_MHZ"] = self.cpuTextField.text;
-                }
-                if (self.ramTextField.text.length > 0) {
-                    object[@"ram_mem"] = self.ramTextField.text;
-                }
-                if (self.harddriveTextField.text.length > 0) {
-                    object[@"hd_size"] = self.harddriveTextField.text;
-                }
-                if (self.fundingTextField.text.length > 0) {
-                    object[@"funding"] = self.fundingTextField.text;
-                }
-                if (self.adminAccessTextField.text.length > 0) {
-                    bool boolean = [self.adminAccessTextField.text boolValue];
-                    NSNumber *number = [NSNumber numberWithBool:boolean];
-                    object[@"admin_access"] = number;
-                }
-                if (self.teacherAccessTextField.text.length > 0) {
-                    bool boolean = [self.teacherAccessTextField.text boolValue];
-                    NSNumber *number = [NSNumber numberWithBool:boolean];
-                    object[@"teacher_access"] = number;
-                }
-                if (self.studentAccessTextField.text.length > 0) {
-                    bool boolean = [self.studentAccessTextField.text boolValue];
-                    NSNumber *number = [NSNumber numberWithBool:boolean];
-                    object[@"student_access"] = number;
-                }
-                if (self.instructionalAccessTextField.text.length > 0) {
-                    bool boolean = [self.instructionalAccessTextField.text boolValue];
-                    NSNumber *number = [NSNumber numberWithBool:boolean];
-                    object[@"instructional_access"] = number;
-                }
-                if (self.txtFieldBranchYear.text.length > 0) {
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
-                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
-                    NSDate *date = [[NSDate alloc] init];
-                    date = [formatter dateFromString:self.txtFieldBranchYear.text];
-                    object[@"lastScanned"] = date;
-                    //NSLog(@"%@\n", date);
-                }
-                [object saveInBackground];
-                NSString *string = @"You successfully added the device with barcode ";
-                NSString *append = self.barcodeTextField.text;
-                NSString *message = [string stringByAppendingString:append];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Added!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                self.barcodeTextField.text = @"";
-                self.assetTextField.text = @"";
-                self.buildingTextField.text = @"";
-                self.roomTextField.text = @"";
-                self.deviceTypeTextField.text = @"";
-                self.brandTextField.text = @"";
-                self.modelTextField.text = @"";
-                self.operatingSystemTextField.text = @"";
-                self.cpuTextField.text = @"";
-                self.ramTextField.text = @"";
-                self.harddriveTextField.text = @"";
-                self.fundingTextField.text = @"";
-                self.adminAccessTextField.text = @"";
-                self.teacherAccessTextField.text = @"";
-                self.studentAccessTextField.text = @"";
-                self.instructionalAccessTextField.text = @"";
-                self.txtFieldBranchYear.text = @"";
-                [alert show];
-            }
-        }];
+            }];
+        }
     }
+    
     
 }
 
