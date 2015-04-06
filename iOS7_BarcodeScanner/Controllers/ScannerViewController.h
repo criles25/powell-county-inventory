@@ -13,4 +13,5 @@
 @interface ScannerViewController : UIViewController<UIAlertViewDelegate, SettingsDelegate>
 @property (strong, nonatomic) NSMutableArray * allowedBarcodeTypes;
 @property (strong, nonatomic) PFObject *objectLastScanned;
+- (IBAction)unwindToScan:(UIStoryboardSegue *)segue;
 @end

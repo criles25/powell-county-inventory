@@ -624,9 +624,11 @@
                         <outlet property="studentAccessTextField" destination="QYF-sq-0nD" id="ibX-i5-8EG"/>
                         <outlet property="teacherAccessTextField" destination="BN6-Yz-awD" id="MpT-xp-t4i"/>
                         <outlet property="txtFieldBranchYear" destination="BBd-5l-km1" id="1Ve-C6-b5N"/>
+                        <segue destination="RdQ-iA-ggD" kind="unwind" identifier="unwindToScan" unwindAction="unwindToScan:" id="9me-9u-mnK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VYX-GZ-4O8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="RdQ-iA-ggD" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="293" y="-881"/>
         </scene>

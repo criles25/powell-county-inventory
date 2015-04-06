@@ -37,6 +37,7 @@
 
 @implementation AddUpdateViewController {
     PFObject *objectLastScanned;
+    BOOL fromScan;
 }
 
 - (void)viewDidLoad {
@@ -85,6 +86,7 @@
 
 -(void)setFields:(PFObject *)object; {
     self->objectLastScanned = object;
+    self->fromScan = true;
 }
 - (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
 {
@@ -224,7 +226,7 @@
                         NSString *string = @"You successfully updated the values for device with barcode ";
                         NSString *append = self.barcodeTextField.text;
                         NSString *message = [string stringByAppendingString:append];
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Updated!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Updated!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         self.barcodeTextField.text = @"";
                         self.assetTextField.text = @"";
                         self.buildingTextField.text = @"";
@@ -244,7 +246,7 @@
                         self.txtFieldBranchYear.text = @"";
                         [alert show];
                     } else {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Empty Fields!" message:@"Enter a value into a field to change its value" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Empty Fields!" message:@"Enter a value into a field to change its value" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         [alert show];
                     }
                     
@@ -321,7 +323,7 @@
                     NSString *string = @"You successfully added the device with barcode ";
                     NSString *append = self.barcodeTextField.text;
                     NSString *message = [string stringByAppendingString:append];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Added!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Added!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     self.barcodeTextField.text = @"";
                     self.assetTextField.text = @"";
                     self.buildingTextField.text = @"";
@@ -353,6 +355,11 @@
     return YES;
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (self->fromScan) {
+        [self performSegueWithIdentifier:@"unwindToScan" sender:self];
+    }
+}
 /*
 #pragma mark - Navigation
 

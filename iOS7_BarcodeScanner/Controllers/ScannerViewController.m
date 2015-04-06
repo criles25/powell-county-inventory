@@ -329,6 +329,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     }
 }
 
+- (IBAction)unwindToScan:(UIStoryboardSegue *)segue {}
 
 
 @end

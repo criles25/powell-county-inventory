@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D41746981837E91900F83533"
-               BuildableName = "iOS7_BarcodeScanner.app"
-               BlueprintName = "iOS7_BarcodeScanner"
+               BuildableName = "PCSInventory.app"
+               BlueprintName = "PCSInventory"
                ReferencedContainer = "container:PowellCountyInventory.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,8 +57,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D41746981837E91900F83533"
-            BuildableName = "iOS7_BarcodeScanner.app"
-            BlueprintName = "iOS7_BarcodeScanner"
+            BuildableName = "PCSInventory.app"
+            BlueprintName = "PCSInventory"
             ReferencedContainer = "container:PowellCountyInventory.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -77,8 +77,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D41746981837E91900F83533"
-            BuildableName = "iOS7_BarcodeScanner.app"
-            BlueprintName = "iOS7_BarcodeScanner"
+            BuildableName = "PCSInventory.app"
+            BlueprintName = "PCSInventory"
             ReferencedContainer = "container:PowellCountyInventory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -96,8 +96,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D41746981837E91900F83533"
-            BuildableName = "iOS7_BarcodeScanner.app"
-            BlueprintName = "iOS7_BarcodeScanner"
+            BuildableName = "PCSInventory.app"
+            BlueprintName = "PCSInventory"
             ReferencedContainer = "container:PowellCountyInventory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
