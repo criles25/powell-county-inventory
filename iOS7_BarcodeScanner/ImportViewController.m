@@ -28,6 +28,46 @@
 - (IBAction)handleImportButtonClick:(id)sender {
     // Charles Riley
     // Maria, put your code here please!
+    
+    //Store file name specified by user.
+    
+    NSString *filename = self.filenameTextField.text;
+    
+    //Check that file specified is a csv file.
+    
+    NSString *ext=[filename pathExtension];
+    
+    if (![ext isEqualToString:@"csv"]) //if not a csv file ... then alert the user.
+    {
+        //Alert the user that the file is not of the correct format.
+        UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
+                                                    message:@"The file specified is not a .csv file."
+                                                    delegate:self
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles: nil];
+        [alert show];
+        
+        //don't let anything else happen beyong this point. Go back to original display.
+    }
+    else //else ... the file is of the correct format (.csv), so continue the import process
+    {
+        //CHECK if file exists in the app folder ***
+        
+        //Find path of file inside the Documents folder of our app.
+    
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *filePath = [documentsDirectory stringByAppendingPathComponent:filename];
+    
+        //Access the contents of the file and parse the file. ***
+    
+        NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    
+        //Note: Make sure that serial number and room have values in the csv file.
+        
+        //I will use code from https://parse.com/questions/import-xlscsv-in-existing-table to do stuff here
+        
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

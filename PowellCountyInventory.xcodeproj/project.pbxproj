@@ -85,7 +85,7 @@
 		AB4881F11AC22FF600211665 /* ImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImportViewController.h; sourceTree = "<group>"; };
 		AB4881F21AC22FF600211665 /* ImportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImportViewController.m; sourceTree = "<group>"; };
 		AB8BD5251AB33FCE004CE10A /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		D41746991837E91900F83533 /* iOS7_BarcodeScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS7_BarcodeScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D41746991837E91900F83533 /* PCSInventory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCSInventory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D417469C1837E91900F83533 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D417469E1837E91900F83533 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		D41746A01837E91900F83533 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -164,7 +164,7 @@
 		D417469A1837E91900F83533 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D41746991837E91900F83533 /* iOS7_BarcodeScanner.app */,
+				D41746991837E91900F83533 /* PCSInventory.app */,
 				D41746BD1837E91900F83533 /* iOS7_BarcodeScannerTests.xctest */,
 			);
 			name = Products;
@@ -286,7 +286,7 @@
 			);
 			name = PCSInventory;
 			productName = iOS7_BarcodeScanner;
-			productReference = D41746991837E91900F83533 /* iOS7_BarcodeScanner.app */;
+			productReference = D41746991837E91900F83533 /* PCSInventory.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D41746BC1837E91900F83533 /* iOS7_BarcodeScannerTests */ = {
@@ -552,7 +552,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iOS7_BarcodeScanner.app/iOS7_BarcodeScanner";
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				CODE_SIGN_IDENTITY = "-";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -568,7 +568,7 @@
 				);
 				INFOPLIST_FILE = "iOS7_BarcodeScannerTests/iOS7_BarcodeScannerTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PCSInventory.app/PCSInventory";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -577,7 +577,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iOS7_BarcodeScanner.app/iOS7_BarcodeScanner";
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				CODE_SIGN_IDENTITY = "-";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -589,7 +589,7 @@
 				GCC_PREFIX_HEADER = "iOS7_BarcodeScanner/iOS7_BarcodeScanner-Prefix.pch";
 				INFOPLIST_FILE = "iOS7_BarcodeScannerTests/iOS7_BarcodeScannerTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PCSInventory.app/PCSInventory";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
