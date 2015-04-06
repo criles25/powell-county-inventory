@@ -61,7 +61,7 @@
     
         //Access the contents of the file and parse the file. ***
     
-        NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+        //NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
         //Note: Make sure that serial number and room have values in the csv file.
         
