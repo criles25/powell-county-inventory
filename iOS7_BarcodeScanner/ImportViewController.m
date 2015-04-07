@@ -47,11 +47,13 @@
                                                     otherButtonTitles: nil];
         [alert show];
         
-        //don't let anything else happen beyong this point. Go back to original display.
+        //don't let anything else happen beyond this point. Go back to original display.
     }
     else //else ... the file is of the correct format (.csv), so continue the import process
     {
-        //Should use a sample .csv file within simulator, for testing**
+        //Should use a sample .csv file within simulator, for testing***
+        //check here for where to store file so that simulator has access:
+        //http://stackoverflow.com/questions/9712551/finding-a-saved-file-on-the-simulator
         
         //Find path of file inside the Documents folder of our app.
     
@@ -73,17 +75,111 @@
                                                         otherButtonTitles: nil];
             [alert show];
             
-            //don't let anything else happen beyong this point. Go back to original display.
+            //don't let anything else happen beyond this point. Go back to original display.
         }
         else
         {
-            //Access the contents of the file and parse the file. ***
+            //Access the contents of the file and parse the file.
     
-            //NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+            NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
-            //Note: Make sure that serial number and room have values in the csv file.
-        
-            //I will use code from https://parse.com/questions/import-xlscsv-in-existing-table to do stuff here
+            NSArray *rows = [content componentsSeparatedByString:@"\n"];
+            NSUInteger numOfRows = [rows count];
+            
+            NSMutableArray *problemRows = [[NSMutableArray alloc]init];
+            NSMutableArray *allTheData = [[NSMutableArray alloc]init];
+            
+            BOOL problemExists = NO;
+            
+            //store column names
+            NSArray *columnNames = [rows[0] componentsSeparatedByString:@","];
+            NSUInteger numOfColumns = [columnNames count];
+            
+            //remove row with names from rows array
+            
+            //for (NSString *row in rows)
+            for(int i = 1; i < numOfRows; i++) //ignore first row, which contains column names
+            {
+                NSArray *columns = [rows[i] componentsSeparatedByString:@","]; //entries in row i
+                
+                //go through stored entries in current row and check if serial number or room are empty
+                for(int j = 0; [columns count]; j++)
+                {
+                    if([columnNames[j] isEqualToString:@"serial_number"])
+                    {
+                        if([columns[j] length] == 0)
+                        {
+                            //Serial number entry is empty. not good! This means that none of this will be stored
+                            //into the Parse table until the problem is fixed. So, for now, store the row number so
+                            //that later we can tell the user where the problem was found.
+                            
+                            NSNumber *rowNum = [NSNumber numberWithInt:i]; //store row index into NSNumber object
+                            [problemRows addObject:rowNum];
+                            problemExists = YES;
+                        }
+                    }
+                    if([columnNames[j] isEqualToString:@"room"])
+                    {
+                        if([columns[j] length] == 0)
+                        {
+                            //Room entry is empty. not good! This means that none of this will be stored
+                            //into the Parse table until the problem is fixed. So, for now, store the row number so
+                            //that later we can tell the user where the problem was found.
+                            
+                            NSNumber *rowNum = [NSNumber numberWithInt:i]; //store row index into NSNumber object
+                            [problemRows addObject:rowNum];
+                            problemExists = YES;
+                        }
+                    }
+                    
+                }
+                
+                //Add data into multidimensional array, so to later have all the data in one place and, if conditions
+                //are right, store the data into the Parse database
+                
+                [allTheData addObject:columns];
+
+            }
+            
+            //Now, if no problems are present (no serial numbers or rooms were empty), then proceed to update Parse.
+            
+            if(problemExists == NO)
+            {
+                for(int i = 0; i < numOfRows; i++) //go through rows
+                {
+                    //PFObject *deviceInfo = [PFObject objectWithClassName:@"DeviceInventory"];
+                    PFObject *deviceInfo = [PFObject objectWithClassName:@"practice"]; //practice table
+                    NSArray *therow = allTheData[i];
+                    
+                    for(int j=0; j < numOfColumns; j++) //go through rows
+                    {
+                        deviceInfo[columnNames[j]] = therow[j];
+                    }
+                    
+                    //add or update row in Parse table
+                    
+                    [deviceInfo saveInBackground];
+                    
+                }
+            }
+            else //there is a problem present!
+            {
+                //Alert the user that either serial numbers or rooms were left blank in some rows
+                //and specify in which rows
+                
+                NSString *message1 = @"The following rows in the file have either empty serial numbers or empty room values: ";
+                NSString *theproblemrows = [[problemRows valueForKey:@"description"] componentsJoinedByString:@","];
+                
+                NSString *themessage = [NSString stringWithFormat:@"%@/%@/", message1, theproblemrows];
+                
+                UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
+                                                                 message:themessage
+                                                                delegate:self
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles: nil];
+                [alert show];
+            }
+
         }
         
     }
