@@ -51,7 +51,7 @@
     }
     else //else ... the file is of the correct format (.csv), so continue the import process
     {
-        //CHECK if file exists in the app folder ***
+        //Should use a sample .csv file within simulator, for testing**
         
         //Find path of file inside the Documents folder of our app.
     
@@ -59,13 +59,32 @@
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString *filePath = [documentsDirectory stringByAppendingPathComponent:filename];
     
-        //Access the contents of the file and parse the file. ***
-    
-        //NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
-    
-        //Note: Make sure that serial number and room have values in the csv file.
+        //Check if file exists
         
-        //I will use code from https://parse.com/questions/import-xlscsv-in-existing-table to do stuff here
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
+        
+        if(fileExists == NO) //if file does not exist ... then alert the user
+        {
+            //Alert the user that the file is not of the correct format.
+            UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
+                                                        message:@"The file specified does not exist in the device."
+                                                        delegate:self
+                                                        cancelButtonTitle:@"OK"
+                                                        otherButtonTitles: nil];
+            [alert show];
+            
+            //don't let anything else happen beyong this point. Go back to original display.
+        }
+        else
+        {
+            //Access the contents of the file and parse the file. ***
+    
+            NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    
+            //Note: Make sure that serial number and room have values in the csv file.
+        
+            //I will use code from https://parse.com/questions/import-xlscsv-in-existing-table to do stuff here
+        }
         
     }
 }
