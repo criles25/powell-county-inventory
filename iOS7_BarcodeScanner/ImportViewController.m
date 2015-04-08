@@ -95,15 +95,15 @@
             NSArray *columnNames = [rows[0] componentsSeparatedByString:@","];
             NSUInteger numOfColumns = [columnNames count];
             
-            //remove row with names from rows array
-            
             //for (NSString *row in rows)
             for(int i = 1; i < numOfRows; i++) //ignore first row, which contains column names
             {
+                //change this so that it works when an entry has commas
+                //f an entry is num1,num2 then the csv file has it as "num1,num2" (including the quotes)
                 NSArray *columns = [rows[i] componentsSeparatedByString:@","]; //entries in row i
                 
                 //go through stored entries in current row and check if serial number or room are empty
-                for(int j = 0; [columns count]; j++)
+                for(int j = 0; j < [columns count]; j++)
                 {
                     if([columnNames[j] isEqualToString:@"serial_number"])
                     {
@@ -113,7 +113,7 @@
                             //into the Parse table until the problem is fixed. So, for now, store the row number so
                             //that later we can tell the user where the problem was found.
                             
-                            NSNumber *rowNum = [NSNumber numberWithInt:i]; //store row index into NSNumber object
+                            NSNumber *rowNum = [NSNumber numberWithInt:i+1]; //store row index into NSNumber object
                             [problemRows addObject:rowNum];
                             problemExists = YES;
                         }
@@ -126,7 +126,7 @@
                             //into the Parse table until the problem is fixed. So, for now, store the row number so
                             //that later we can tell the user where the problem was found.
                             
-                            NSNumber *rowNum = [NSNumber numberWithInt:i]; //store row index into NSNumber object
+                            NSNumber *rowNum = [NSNumber numberWithInt:i+1]; //store row index into NSNumber object
                             [problemRows addObject:rowNum];
                             problemExists = YES;
                         }
@@ -145,20 +145,41 @@
             
             if(problemExists == NO)
             {
-                for(int i = 0; i < numOfRows; i++) //go through rows
+                for(int i = 0; i < (numOfRows-1); i++) //go through rows
                 {
-                    //PFObject *deviceInfo = [PFObject objectWithClassName:@"DeviceInventory"];
-                    PFObject *deviceInfo = [PFObject objectWithClassName:@"practice"]; //practice table
+                    PFObject *deviceInfo = [PFObject objectWithClassName:@"DeviceInventory"];
+                    //PFObject *deviceInfo = [PFObject objectWithClassName:@"practice"]; //practice table
                     NSArray *therow = allTheData[i];
                     
                     for(int j=0; j < numOfColumns; j++) //go through rows
                     {
-                        deviceInfo[columnNames[j]] = therow[j];
+                        //if the column is a boolean, cast the string to boolean
+                        
+                        if([columnNames[j] isEqualToString:@"admin_access"] || [columnNames[j] isEqualToString:@"teacher_access"] || [columnNames[j] isEqualToString:@"student_access"] || [columnNames[j] isEqualToString:@"instructional_access"])
+                        {
+                            
+                            BOOL thething = [therow[j] boolValue];
+                            NSNumber *number = [NSNumber numberWithBool:thething];
+                            deviceInfo[columnNames[j]] = number;
+                        }
+                        else
+                        {
+                            deviceInfo[columnNames[j]] = therow[j];
+                        }
                     }
+                    
+                    deviceInfo[@"serial_number"] = therow[0];
                     
                     //add or update row in Parse table
                     
-                    [deviceInfo saveInBackground];
+                    [deviceInfo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        if (succeeded) {
+                            NSLog(@"Awesome!");
+                        } else {
+                            // There was a problem, check error.description
+                            NSLog(@"%@",[error description]);
+                        }
+                    }];
                     
                 }
             }

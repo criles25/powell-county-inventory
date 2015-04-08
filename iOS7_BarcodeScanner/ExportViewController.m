@@ -94,7 +94,7 @@
                 [fileHandle writeData:[line dataUsingEncoding:NSUTF8StringEncoding]];
             }
             [fileHandle closeFile];
-            //NSLog(@"%@\n", path);
+            NSLog(@"%@\n", path);
         } else {
             // log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);
