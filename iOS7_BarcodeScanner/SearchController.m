@@ -18,64 +18,48 @@
 @implementation SearchController
 - (IBAction)searchButtonPressed:(id)sender {
     // Query parse back end
-    PFQuery *query = [PFQuery queryWithClassName:@"practice"];
+//    PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
     
     // check if text filed is not empty
     if(self.searchTextField.text.length>0)
     {
-        NSString *buildingName = self.searchTextField.text;
-        [query whereKey:@"building" equalTo:(buildingName)];
+        //NSString *barcodeId= self.searchTextField.text;
+        //[query whereKey:@"serial_number" equalTo:barcodeId];
+        PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
+        [query whereKey:@"serial_number" equalTo:self.searchTextField.text];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                NSLog(@"Successfully retrieved %d scores.", objects.count);
+                // Create object
+                PFObject *object = objects[0];
+                NSString *line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@\n",
+                                  object[@"serial_number"],
+                                  object[@"asset_tag"],
+                                  object[@"building"],
+                                  object[@"room"],
+                                  object[@"device_type"],
+                                  object[@"device_brand"],
+                                  object[@"device_model"]
+                                  ];
+                // show alert
+                UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Found!"
+                                                                 message:line
+                                                                delegate:self
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles: nil];
+                [alert show];
+            } else {
+                // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+        }];
         
     }
     
     // get the objects from parse
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-    
-        if(!error)
-        {
-            
-            NSString *line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
-                              @"adm_use",
-                              @"asset_number",
-                              @"building",
-                              @"computer",
-                              @"cpu",
-                              @"device_type",
-                              @"funding",
-                              @"hd",
-                              @"inst_use",
-                              @"os",
-                              @"ram",
-                              @"serial",
-                              @"stu_use",
-                              @"tchr_use",
-                              @"room"];
-            // array to store each row as line
-            NSMutableArray *objectList = [[NSMutableArray alloc] initWithCapacity:[objects count]];
-            for (PFObject *object in objects) {
-                //NSLog(@"%@", object.objectId);
-                line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
-                        object[@"adm"],
-                        object[@"asset"],
-                        object[@"building"],
-                        object[@"computer"],
-                        object[@"cpu"],
-                        object[@"device_type"],
-                        object[@"funding"],
-                        object[@"hd"],
-                        object[@"inst"],
-                        object[@"os"],
-                        object[@"ram"],
-                        object[@"serial"],
-                        object[@"stu"],
-                        object[@"tchr"],
-                        object[@"teacher"]];
-                [objectList addObject:line];
-            }
-        }
-    }];
-    }
-
+   // [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+}
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     [self.searchTextField resignFirstResponder];
