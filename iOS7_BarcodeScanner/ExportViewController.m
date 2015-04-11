@@ -144,6 +144,11 @@
                               @"instructional_access"];
             NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
             NSString *file = [path stringByAppendingPathComponent:filename];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:file]) {
+                NSString *warning = @"Warning: overwriting existing file with name ";
+                warning = [warning stringByAppendingString:filename];
+                [warnings addObject:warning];
+            }
             [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
             NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:file];
             [fileHandle writeData:[line dataUsingEncoding:NSUTF8StringEncoding]];

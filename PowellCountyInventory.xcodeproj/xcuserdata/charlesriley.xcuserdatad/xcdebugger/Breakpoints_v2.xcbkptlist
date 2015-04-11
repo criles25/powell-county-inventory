@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iOS7_BarcodeScanner/ExportViewController.m"
-            timestampString = "450477004.852435"
+            timestampString = "450478525.226498"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "-handleExportButtonClick:"
             landmarkType = "5">
          </BreakpointContent>
