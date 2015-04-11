@@ -777,7 +777,7 @@ CA
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="288" translatesAutoresizingMaskIntoConstraints="NO" id="C24-fy-WfB">
                                 <rect key="frame" x="16" y="72" width="288" height="124"/>
-                                <string key="text">Enter the buildings, rooms, and device types you want exported in a .csv file. Leave a field empty for all of that type. Put a space between each entry for two or more entries. Also enter a date in 'Last Found' to export only devices found since that date. Enter a filename for the exported .csv file.</string>
+                                <string key="text">Enter the buildings, rooms, and device types you want exported in a .csv file. Leave a field empty for all of that type. Put a forward slash '/' between each entry for two or more entries. Also enter a date in 'Last Found' to export only devices found since that date. Enter a filename for the exported .csv file.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>

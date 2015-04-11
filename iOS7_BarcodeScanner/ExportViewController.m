@@ -56,15 +56,15 @@
     // query database
     PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
     if (self.buildingTextField.text.length > 0) {
-        NSArray *buildings = [self.buildingTextField.text componentsSeparatedByString:@" "];
+        NSArray *buildings = [self.buildingTextField.text componentsSeparatedByString:@"/"];
         [query whereKey:@"building" containedIn:buildings];
     }
     if (self.roomTextField.text.length > 0) {
-        NSArray *rooms = [self.roomTextField.text componentsSeparatedByString:@" "];
+        NSArray *rooms = [self.roomTextField.text componentsSeparatedByString:@"/"];
         [query whereKey:@"room" containedIn:rooms];
     }
     if (self.deviceTextField.text.length > 0) {
-        NSArray *devices = [self.deviceTextField.text componentsSeparatedByString:@" "];
+        NSArray *devices = [self.deviceTextField.text componentsSeparatedByString:@"/"];
         [query whereKey:@"device_type" containedIn:devices];
     }
     if (self.lastFoundTextField.text.length > 0) {
