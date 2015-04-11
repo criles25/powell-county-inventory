@@ -53,20 +53,28 @@
 - (IBAction)handleExportButtonClick:(id)sender {
     // Charles Riley
     self.navigationItem.hidesBackButton = YES;
+    NSMutableArray *warnings = [[NSMutableArray alloc] init];
     // query database
     PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
+    // Buildings
+    NSArray *buildings;
     if (self.buildingTextField.text.length > 0) {
-        NSArray *buildings = [self.buildingTextField.text componentsSeparatedByString:@"/"];
+        buildings = [self.buildingTextField.text componentsSeparatedByString:@"/"];
         [query whereKey:@"building" containedIn:buildings];
     }
+    // Rooms
+    NSArray *rooms;
     if (self.roomTextField.text.length > 0) {
-        NSArray *rooms = [self.roomTextField.text componentsSeparatedByString:@"/"];
+        rooms = [self.roomTextField.text componentsSeparatedByString:@"/"];
         [query whereKey:@"room" containedIn:rooms];
     }
+    // Device types
+    NSArray *devices;
     if (self.deviceTextField.text.length > 0) {
-        NSArray *devices = [self.deviceTextField.text componentsSeparatedByString:@"/"];
+        devices = [self.deviceTextField.text componentsSeparatedByString:@"/"];
         [query whereKey:@"device_type" containedIn:devices];
     }
+    // Last found date
     if (self.lastFoundTextField.text.length > 0) {
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
@@ -75,6 +83,7 @@
         date = [formatter dateFromString:self.lastFoundTextField.text];
         [query whereKey:@"lastScanned" greaterThanOrEqualTo:date];
     }
+    // Filename
     NSString *filename = @"inventory.csv";
     if (self.filenameTextField.text.length > 0) {
         filename = self.filenameTextField.text;
@@ -83,6 +92,38 @@
     // build .csv file
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
+            // create warnings
+            for (NSString *building in buildings) {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"building == %@", building];
+                NSArray *array = [objects filteredArrayUsingPredicate:predicate];
+                if (![array count]) {
+                    NSLog(@"Warning: none of this building type %@ found!", building);
+                    NSString *warning = @"Warning: none of building type ";
+                    warning = [warning stringByAppendingString:building];
+                    [warnings addObject:warning];
+                }
+            }
+            for (NSString *room in rooms) {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"room == %@", room];
+                NSArray *array = [objects filteredArrayUsingPredicate:predicate];
+                if (![array count]) {
+                    NSLog(@"Warning: none of this room type %@ found!", room);
+                    NSString *warning = @"Warning: none of room type ";
+                    warning = [warning stringByAppendingString:room];
+                    [warnings addObject:warning];
+                }
+            }
+            for (NSString *device in devices) {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"device_type == %@", device];
+                NSArray *array = [objects filteredArrayUsingPredicate:predicate];
+                if (![array count]) {
+                    NSLog(@"Warning: none of this device type %@ found!", device);
+                    NSString *warning = @"Warning: none of device type ";
+                    warning = [warning stringByAppendingString:device];
+                    [warnings addObject:warning];
+                }
+            }
+            
             // code to build .csv file
             NSString *line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                               @"serial_number",
@@ -132,6 +173,10 @@
             NSLog(@"%@\n", path);
             NSString *message = @"Exported inventory to .csv file with name ";
             message = [message stringByAppendingString:filename];
+            for (NSString *warning in warnings) {
+                message = [message stringByAppendingString:@"\n"];
+                message = [message stringByAppendingString:warning];
+            }
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Inventory Exported!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
         } else {
