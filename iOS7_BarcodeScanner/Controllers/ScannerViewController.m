@@ -42,14 +42,18 @@
     AVCaptureVideoPreviewLayer *_previewLayer;
     BOOL _running;
     AVCaptureMetadataOutput *_metadataOutput;
-    
     // keep track of if UIAlert showing
     BOOL alertShowing;
+    // no network connection UIAlert showing
+    BOOL network;
+    // for showing/hiding right nav bar button
+    UIBarButtonItem *oldButton;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    oldButton = self.navigationItem.rightBarButtonItem;
     alertShowing = false;
     
     [self setupCaptureSession];
@@ -211,7 +215,8 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
 - (void) validBarcodeFound:(Barcode *)barcode{
     [self stopRunning];
     [self.foundBarcodes addObject:barcode];
-    
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.rightBarButtonItem = nil;
     // Charles Riley
     if (!self->alertShowing) {
         self->alertShowing = true;
@@ -227,6 +232,12 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                 [object saveInBackground];
                 self.objectLastScanned = object;
                 [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"room"]];
+            } else if ([error code] == kPFErrorConnectionFailed) {
+                // couldn't connect to parse
+                NSLog(@"Uh oh, we couldn't even connect to the Parse Cloud!");
+                self->network = true;
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't Connect!" message:@"We couldn't connect to Parse. Make sure you have internet access or cell service." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alert show];
             } else {
                 // barcode not found
                 NSLog(@"Barcode not found %@.\n", barcode.getBarcodeData);
@@ -308,6 +319,15 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     });
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    self.navigationItem.hidesBackButton = NO;
+    self.navigationItem.rightBarButtonItem = oldButton;
+    if (self->network) {
+        // Code for network connection OK button
+        self->network = false;
+        self->alertShowing = false;
+        [self startRunning];
+        return;
+    }
     if(buttonIndex == 0){
         // Code for Add/Update button
         self->alertShowing = false;

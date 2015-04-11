@@ -131,6 +131,7 @@
 }
 
 - (IBAction)submitPressed:(id)sender {
+    self.navigationItem.hidesBackButton = YES;
     // lock
     @synchronized(self) {
         // barcode entered
@@ -250,6 +251,11 @@
                         [alert show];
                     }
                     
+                } else if ([error code] == kPFErrorConnectionFailed) {
+                    // couldn't connect to parse
+                    NSLog(@"Uh oh, we couldn't even connect to the Parse Cloud!");
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't Connect!" message:@"We couldn't connect to Parse. Make sure you have internet access or cell service." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alert show];
                 } else {
                     // barcode not found
                     NSLog(@"Barcode not found %@.\n", self.barcodeTextField.text);
@@ -344,6 +350,10 @@
                     [alert show];
                 }
             }];
+        } else {
+            NSLog(@"No barcode!\n");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Barcode!" message:@"Please enter a barcode to add or update." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
         }
     }
     
@@ -356,6 +366,7 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    self.navigationItem.hidesBackButton = NO;
     if (self->fromScan) {
         [self performSegueWithIdentifier:@"unwindToScan" sender:self];
     }
