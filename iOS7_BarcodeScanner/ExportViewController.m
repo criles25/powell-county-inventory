@@ -52,6 +52,7 @@
 
 - (IBAction)handleExportButtonClick:(id)sender {
     // Charles Riley
+    self.navigationItem.hidesBackButton = YES;
     // query database
     PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
     if (self.buildingTextField.text.length > 0) {
@@ -107,7 +108,7 @@
             [fileHandle writeData:[line dataUsingEncoding:NSUTF8StringEncoding]];
             for (PFObject *object in objects) {
                 //NSLog(@"%@", object.objectId);
-                line = [NSString stringWithFormat:@"%@,%@,%@,\"%@\",%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+                line = [NSString stringWithFormat:@"%@,%@,\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",\"%@\",%@,%@,%@,%@\n",
                         object[@"serial_number"],
                         object[@"asset_tag"],
                         object[@"building"],
@@ -129,13 +130,23 @@
             }
             [fileHandle closeFile];
             NSLog(@"%@\n", path);
+            NSString *message = @"Exported inventory to .csv file with name ";
+            message = [message stringByAppendingString:filename];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Inventory Exported!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
         } else {
             // log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failed to Export!" message:@"Make sure you have cell service or an internet connection" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
         }
     }];
-    // email .csv file
-    // Dhish, put your code here!
+    // reset text fields to be empty
+    self.buildingTextField.text = @"";
+    self.roomTextField.text = @"";
+    self.deviceTextField.text = @"";
+    self.lastFoundTextField.text = @"";
+    self.filenameTextField.text = @"";
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -151,6 +162,9 @@
     return YES;
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    self.navigationItem.hidesBackButton = NO;
+}
 /*
 #pragma mark - Navigation
 
