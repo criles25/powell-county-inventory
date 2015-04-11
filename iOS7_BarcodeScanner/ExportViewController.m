@@ -14,6 +14,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *roomTextField;
 @property (weak, nonatomic) IBOutlet UITextField *deviceTextField;
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
+@property (weak, nonatomic) IBOutlet UITextField *lastFoundTextField;
+@property (weak, nonatomic) IBOutlet UITextField *filenameTextField;
 
 @end
 
@@ -21,12 +23,31 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    // setup last found textfield
+    UIDatePicker *datePicker = [[UIDatePicker alloc]init];
+    //[datePicker setDate:[NSDate date]];
+    datePicker.datePickerMode = UIDatePickerModeDate;
+    [datePicker addTarget:self action:@selector(dateTextField:) forControlEvents:UIControlEventValueChanged];
+    [self.lastFoundTextField setInputView:datePicker];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) dateTextField:(id)sender
+{
+    //[picker setMaximumDate:[NSDate date]];
+    //NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    //[dateFormat setDateFormat:@"dd/MM/yyyy"];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    UIDatePicker *picker = (UIDatePicker*)self.lastFoundTextField.inputView;
+    NSDate *eventDate = picker.date;
+    NSString *dateString = [formatter stringFromDate:eventDate];
+    self.lastFoundTextField.text = [NSString stringWithFormat:@"%@",dateString];
 }
 
 - (IBAction)handleExportButtonClick:(id)sender {
@@ -108,6 +129,8 @@
     [self.buildingTextField resignFirstResponder];
     [self.roomTextField resignFirstResponder];
     [self.deviceTextField resignFirstResponder];
+    [self.lastFoundTextField resignFirstResponder];
+    [self.filenameTextField resignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
