@@ -66,6 +66,14 @@
         NSArray *devices = [self.deviceTextField.text componentsSeparatedByString:@" "];
         [query whereKey:@"device_type" containedIn:devices];
     }
+    if (self.lastFoundTextField.text.length > 0) {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+        NSDate *date = [[NSDate alloc] init];
+        date = [formatter dateFromString:self.lastFoundTextField.text];
+        [query whereKey:@"lastScanned" greaterThanOrEqualTo:date];
+    }
     // build .csv file
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
