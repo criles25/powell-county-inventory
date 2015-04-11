@@ -74,6 +74,11 @@
         date = [formatter dateFromString:self.lastFoundTextField.text];
         [query whereKey:@"lastScanned" greaterThanOrEqualTo:date];
     }
+    NSString *filename = @"inventory.csv";
+    if (self.filenameTextField.text.length > 0) {
+        filename = self.filenameTextField.text;
+        filename = [filename stringByAppendingString:@".csv"];
+    }
     // build .csv file
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
@@ -96,7 +101,7 @@
                               @"student_access",
                               @"instructional_access"];
             NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-            NSString *file = [path stringByAppendingPathComponent:@"inventory.csv"];
+            NSString *file = [path stringByAppendingPathComponent:filename];
             [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
             NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:file];
             [fileHandle writeData:[line dataUsingEncoding:NSUTF8StringEncoding]];
