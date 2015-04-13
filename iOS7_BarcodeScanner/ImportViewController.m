@@ -87,9 +87,12 @@
             NSUInteger numOfRows = [rows count];
             
             NSMutableArray *problemRows = [[NSMutableArray alloc]init];
-            NSMutableArray *allTheData = [[NSMutableArray alloc]init];
-            
             BOOL problemExists = NO;
+            
+            __block NSMutableArray *duplicateRows = [[NSMutableArray alloc]init];
+            __block BOOL duplicateSerials = NO;
+            
+            NSMutableArray *allTheData = [[NSMutableArray alloc]init];
             
             //store column names
             NSArray *columnNames = [rows[0] componentsSeparatedByString:@","];
@@ -212,17 +215,55 @@
                 //go through stored entries in current row and check if serial number or room are empty
                 for(int j = 0; j < [columns count]; j++)
                 {
-                    if([columnNames[j] isEqualToString:@"serial_number"] || [columnNames[j] isEqualToString:@"room"])
+                    if([columnNames[j] isEqualToString:@"room"])
                     {
-                        if([columns[j] length] == 0)
+                        if([columns[j] length] == 0) //if there is no room value...
                         {
-                            //Serial number or room entry is empty. not good! This means that none of this will be stored
+                            //room entry is empty. not good! This means that none of this will be stored
                             //into the Parse table until the problem is fixed. So, for now, store the row number so
                             //that later we can tell the user where the problem was found.
                             
                             NSNumber *rowNum = [NSNumber numberWithInt:i+1]; //store row index into NSNumber object
                             [problemRows addObject:rowNum];
                             problemExists = YES;
+                        }
+                    }
+                    
+                    //If we are in a serial number entry, let's check if the serial number exists within the database.
+                    if([columnNames[j] isEqualToString:@"serial_number"])
+                    {
+                        if([columns[j] length] == 0) //if there is no serial number...
+                        {
+                            //Serial number is empty. not good! This means that none of this will be stored
+                            //into the Parse table until the problem is fixed. So, for now, store the row number so
+                            //that later we can tell the user where the problem was found.
+                            
+                            NSNumber *rowNum = [NSNumber numberWithInt:i+1]; //store row index into NSNumber object
+                            [problemRows addObject:rowNum];
+                            problemExists = YES;
+                        }
+                        else //there is a serial number, so let's check if it's withint the database already
+                        {
+                            PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
+                            [query whereKey:@"serial_number" equalTo:columns[j]];
+                            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                                if (!error)
+                                {
+                                    if(objects.count > 0)
+                                    {
+                                        //the serial number exists in the database!
+
+                                        NSNumber *rowNum = [NSNumber numberWithInt:i+1]; //store row index into NSNumber object
+                                        [duplicateRows addObject:rowNum];
+                                        duplicateSerials = YES;
+                                    }
+                                }
+                                else
+                                {
+                                    // Log details of the failure
+                                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                                }
+                            }];
                         }
                     }
                 }
@@ -238,52 +279,73 @@
             
             if(problemExists == NO)
             {
-                for(int i = 0; i < (numOfRows-1); i++) //go through rows
+                if(duplicateSerials == NO) //no empty serial numbers or rooms and no duplicate serial numbers
                 {
-                    PFObject *deviceInfo = [PFObject objectWithClassName:@"DeviceInventory"];
-                    //PFObject *deviceInfo = [PFObject objectWithClassName:@"practice"]; //practice table
-                    NSArray *therow = allTheData[i];
-                    
-                    for(int j=0; j < numOfColumns; j++) //go through rows
+                    for(int i = 0; i < (numOfRows-1); i++) //go through rows
                     {
-                        //if the column is a boolean, cast the string to boolean
+                        PFObject *deviceInfo = [PFObject objectWithClassName:@"DeviceInventory"];
+                        //PFObject *deviceInfo = [PFObject objectWithClassName:@"practice"]; //practice table
+                        NSArray *therow = allTheData[i];
+                    
+                        for(int j=0; j < numOfColumns; j++) //go through rows
+                        {
+                            //if the column is a boolean, cast the string to boolean
                         
-                        if([columnNames[j] isEqualToString:@"admin_access"] || [columnNames[j] isEqualToString:@"teacher_access"] || [columnNames[j] isEqualToString:@"student_access"] || [columnNames[j] isEqualToString:@"instructional_access"])
-                        {
+                            if([columnNames[j] isEqualToString:@"admin_access"] || [columnNames[j] isEqualToString:@"teacher_access"] || [columnNames[j] isEqualToString:@"student_access"] || [columnNames[j] isEqualToString:@"instructional_access"])
+                            {
                             
-                            BOOL thething = [therow[j] boolValue];
-                            NSNumber *number = [NSNumber numberWithBool:thething];
-                            deviceInfo[columnNames[j]] = number;
+                                BOOL thething = [therow[j] boolValue];
+                                NSNumber *number = [NSNumber numberWithBool:thething];
+                                deviceInfo[columnNames[j]] = number;
+                            }
+                            else
+                            {
+                                deviceInfo[columnNames[j]] = therow[j];
+                            }
                         }
-                        else
-                        {
-                            deviceInfo[columnNames[j]] = therow[j];
-                        }
+                    
+                        deviceInfo[@"serial_number"] = therow[0];
+                    
+                        //add or update row in Parse table
+                    
+                        [deviceInfo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            if (succeeded) {
+                                NSLog(@"Awesome!");
+                            } else {
+                                // There was a problem, check error.description
+                                NSLog(@"%@",[error description]);
+                            }
+                        }];
                     }
-                    
-                    deviceInfo[@"serial_number"] = therow[0];
-                    
-                    //add or update row in Parse table
-                    
-                    [deviceInfo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                        if (succeeded) {
-                            NSLog(@"Awesome!");
-                        } else {
-                            // There was a problem, check error.description
-                            NSLog(@"%@",[error description]);
-                        }
-                    }];
-                    
-                }
                 
-                //The import has been completed! Now let's inform the user of this.
+                    //The import has been completed! Now let's inform the user of this.
                 
-                UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Success!"
+                    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Success!"
                                                                 message:@"The data was imported successfully."
                                                                 delegate:self
                                                        cancelButtonTitle:@"OK"
                                                        otherButtonTitles: nil];
-                [alert show];
+                    [alert show];
+                    
+                }
+                else //no empty serial numbers or rooms BUT there are duplicate serial numbers
+                {
+                    //Alert the user that there are duplicate serial numbers in some rows
+                    //and specify in which rows
+                    
+                    NSString *message1 = @"The following rows in the file have serial numbers that are already in the database:";
+                    NSString *theduplicaterows = [[duplicateRows valueForKey:@"description"] componentsJoinedByString:@","];
+                    
+                    NSString *themessage = [NSString stringWithFormat:@"%@%@ \nDo you want to overwrite the values?", message1, theduplicaterows];
+                    
+                    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
+                                                                     message:themessage
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"NO"
+                                                           otherButtonTitles:@"YES", nil];
+                    [alert show];
+
+                }
             }
             else //there is a problem present!
             {
