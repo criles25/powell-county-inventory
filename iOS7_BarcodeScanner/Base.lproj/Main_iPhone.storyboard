@@ -646,9 +646,6 @@
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Building Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rhl-RR-Qou">
                                 <rect key="frame" x="0.0" y="64" width="320" height="30"/>
-                                <string key="text" base64-UTF8="YES">
-CA
-</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
