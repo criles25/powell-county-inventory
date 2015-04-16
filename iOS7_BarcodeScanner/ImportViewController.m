@@ -129,6 +129,9 @@
             BOOL columnNameProblem = NO;
             NSMutableArray *problemColumnNames = [[NSMutableArray alloc]init];
             
+            NSMutableArray *theSerials = [[NSMutableArray alloc] init];
+            NSMutableArray *repeatedSerials = [[NSMutableArray alloc] init];
+            
             for(int i = 0; i < numOfColumns; i++)
             {
                 if([parseColumnNames containsObject: columnNames[i]] == NO)
@@ -227,6 +230,24 @@
                             [problemRows addObject:rowNum];
                             problemExists = YES;
                         }
+                        else //there is a value for serial number, let's check if it is repeated
+                        {
+                            if([columnNames[j] isEqualToString:@"serial_number"])
+                            {
+                                NSString *serialnumber = columns[j];
+                                if([theSerials containsObject: serialnumber] == YES)
+                                {
+                                    
+                                    NSNumber *rowNum = [NSNumber numberWithInt:i+1];
+                                    [repeatedSerials addObject:rowNum];
+                                    
+                                }
+                                else
+                                {
+                                    [theSerials addObject:serialnumber]; //serialnumber is columns[i] or something
+                                }
+                            }
+                        }
                     }
                 }
                 
@@ -239,42 +260,87 @@
             
             //Now, if no problems are present (no serial numbers or rooms were empty), then proceed to update Parse.
             
-            if(problemExists == NO)
+            if((problemExists == NO) && ([repeatedSerials count] == 0))
             {
-                    //NSInteger serialColIndex = [columnNames indexOfObject:@"serial_number"];
+                    NSInteger serialColIndex = [columnNames indexOfObject:@"serial_number"];
                 
                     for(int i = 0; i < (numOfRows-1); i++) //go through rows
                     {
-                        //NSString *serialnumber = allTheData[i][(int)serialColIndex];
+                        NSString *serialnumber = allTheData[i][(int)serialColIndex];
                         
                         
-                        //PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
-                        //[query whereKey:@"serial_number" equalTo:serialnumber];
+                        PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
+                        [query whereKey:@"serial_number" equalTo:serialnumber];
                         
-                        PFObject *deviceInfo = [PFObject objectWithClassName:@"DeviceInventory"];
                         NSArray *therow = allTheData[i];
                         
-                        //[query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                            //if (!error)
-                            //{
+                        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                            if (!error)
+                            { //Serial number already exists in the database, so update the entry.
                         
-                        for(int j=0; j < numOfColumns; j++) //go through rows
-                        {
-                            //if the column is a boolean, cast the string to boolean
+                                for(int j=0; j < numOfColumns; j++) //go through rows
+                                {
+                                    if(j != serialColIndex) //ignore serial number for update
+                                    {
+                                        //if the column is a boolean, cast the string to boolean
                         
-                            if([columnNames[j] isEqualToString:@"admin_access"] || [columnNames[j] isEqualToString:@"teacher_access"] || [columnNames[j] isEqualToString:@"student_access"] || [columnNames[j] isEqualToString:@"instructional_access"])
-                            {
+                                        if([columnNames[j] isEqualToString:@"admin_access"] || [columnNames[j] isEqualToString:@"teacher_access"] || [columnNames[j] isEqualToString:@"student_access"] || [columnNames[j] isEqualToString:@"instructional_access"])
+                                        {
                             
-                                BOOL thething = [therow[j] boolValue];
-                                NSNumber *number = [NSNumber numberWithBool:thething];
-                                deviceInfo[columnNames[j]] = number;
+                                            BOOL thething = [therow[j] boolValue];
+                                            NSNumber *number = [NSNumber numberWithBool:thething];
+                                            object[columnNames[j]] = number;
+                                        }
+                                        else
+                                        {
+                                            object[columnNames[j]] = therow[j];
+                                        }
+                                    }
+                                }
+                                
+                                [object saveInBackground];
+                            }
+                            else if ([error code] == kPFErrorConnectionFailed)
+                            {
+                                // couldn't connect to parse
+                                NSLog(@"Uh oh, we couldn't even connect to the Parse Cloud!");
+                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't Connect!" message:@"We couldn't connect to Parse. Make sure you have internet access or cell service." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                [alert show];
+                                
+                                return;
                             }
                             else
                             {
-                                deviceInfo[columnNames[j]] = therow[j];
+                                //Serial number does not exist in the Parse database. Add new entry to parse table.
+                                
+                                NSLog(@"Serial number not found %@.\n", serialnumber);
+                                
+                                PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
+                                
+                                for(int j=0; j < numOfColumns; j++) //go through rows
+                                {
+                                    
+                                    //if the column is a boolean, cast the string to boolean
+                                        
+                                    if([columnNames[j] isEqualToString:@"admin_access"] || [columnNames[j] isEqualToString:@"teacher_access"] || [columnNames[j] isEqualToString:@"student_access"] || [columnNames[j] isEqualToString:@"instructional_access"])
+                                    {
+                                        
+                                        BOOL thething = [therow[j] boolValue];
+                                        NSNumber *number = [NSNumber numberWithBool:thething];
+                                        object[columnNames[j]] = number;
+                                    }
+                                    else
+                                    {
+                                        object[columnNames[j]] = therow[j];
+                                    }
+                                    
+                                }
+                                
+                                [object saveInBackground];
                             }
-                        }
-                    
+                            
+                        }];
+                        
                         //deviceInfo[@"serial_number"] = therow[0];
                         
                     }
@@ -289,7 +355,7 @@
                     [alert show];
                 
             }
-            else //there is a problem present!
+            else if(problemExists == YES)//there is a problem present!
             {
                 //Alert the user that either serial numbers or rooms were left blank in some rows
                 //and specify in which rows
@@ -298,6 +364,22 @@
                 NSString *theproblemrows = [[problemRows valueForKey:@"description"] componentsJoinedByString:@","];
                 
                 NSString *themessage = [NSString stringWithFormat:@"%@%@", message1, theproblemrows];
+                
+                UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
+                                                                 message:themessage
+                                                                delegate:self
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles: nil];
+                [alert show];
+            }
+            else if(([repeatedSerials count] > 0))
+            {
+                //Alert the user that some serial numbers were repeated within the csv
+                
+                NSString *message1 = @"The following rows in the file contain repeated serial numbers within the file: ";
+                NSString *therepeatedrows = [[repeatedSerials valueForKey:@"description"] componentsJoinedByString:@","];
+                
+                NSString *themessage = [NSString stringWithFormat:@"%@%@", message1, therepeatedrows];
                 
                 UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
                                                                  message:themessage
