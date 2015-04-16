@@ -23,17 +23,23 @@
     // check if text filed is not empty
     if(self.searchTextField.text.length>0)
     {
-        //NSString *barcodeId= self.searchTextField.text;
-        //[query whereKey:@"serial_number" equalTo:barcodeId];
+        // Set connection with Device Inventory table in parse
         PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
+        
+        // Get record matched with serial number attribute in Device Inventory table
         [query whereKey:@"serial_number" equalTo:self.searchTextField.text];
+        
+        // Get the objects
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 // The find succeeded.
-                NSLog(@"Successfully retrieved %d scores.", objects.count);
+                NSLog(@"Successfully retrieved %lu scores.", (unsigned long)[objects count]);
+                NSUInteger sizeOfObjects = [objects count];
+                
+                if(sizeOfObjects>0){
                 // Create object
                 PFObject *object = objects[0];
-                NSString *line = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@\n",
+                NSString *line = [NSString stringWithFormat:@"SerialNumber=%@\rAssetTag=%@\rBuilding=%@\rRoom=%@\rDeviceType=%@\rDeviceBrand=%@\rDeviceModel=%@\n",
                                   object[@"serial_number"],
                                   object[@"asset_tag"],
                                   object[@"building"],
@@ -49,9 +55,22 @@
                                                        cancelButtonTitle:@"OK"
                                                        otherButtonTitles: nil];
                 [alert show];
+                }
+                else{
+                    // show failure alert
+                    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Not Found!"
+                                                                     message:@"Enter Valid Barcode"
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"OK"
+                                                           otherButtonTitles: nil];
+                    [alert show];
+                    
+                }
+                
             } else {
                 // Log details of the failure
                 NSLog(@"Error: %@ %@", error, [error userInfo]);
+                
             }
         }];
         
