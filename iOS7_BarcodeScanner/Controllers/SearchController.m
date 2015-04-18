@@ -5,6 +5,7 @@
 //  Created by Charles Riley on 3/24/15.
 //  Copyright (c) 2015 Charles Riley. All rights reserved.
 //
+/* SearchController handles the barcode textfield, searches the Parse database for the barcode, and returns information about the barcode if it was found. */
 
 #import "SearchController.h"
 #import <Parse/Parse.h>
@@ -18,9 +19,7 @@
 @implementation SearchController
 - (IBAction)searchButtonPressed:(id)sender {
     // Query parse back end
-//    PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
-    
-    // check if text filed is not empty
+    // check if text field is not empty
     if(self.searchTextField.text.length>0)
     {
         // Set connection with Device Inventory table in parse
@@ -75,9 +74,6 @@
         }];
         
     }
-    
-    // get the objects from parse
-   // [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     

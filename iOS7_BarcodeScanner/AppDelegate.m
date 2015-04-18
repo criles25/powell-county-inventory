@@ -5,6 +5,7 @@
 //  Created by Jake Widmer on 11/16/13.
 //  Copyright (c) 2013 Jake Widmer. All rights reserved.
 //
+/* AppDelegate handles app initialization and other important events (such as entering the foreground or background) */
 
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
@@ -13,13 +14,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Allows to save Parse objects locally (will be used for future offline mode)
     [Parse enableLocalDatastore];
     
-    // Initialize Parse. (copy pasted from parse.com, powell account
+    // Initialize Parse. (copy pasted from parse.com, powell account)
     [Parse setApplicationId:@"JirnQB5uvPRzNUHPQH2KY29WdkrMlNUY5cilZlZB"
                   clientKey:@"OrDuDo6kTszWiZFW6QP02KQopgy8sFJkaLeBIcKX"];
-    
-    //[Parse setApplicationId:@"qWRuxVl7yUk8y9pIFOAs2xU2pcmRAEw94u3waHvZ" clientKey:@"qtWfY85sUZJorBaE3yoyazTQkSdaD5iPbQauRkqT"];
     
     // Override point for customization after application launch.
     return YES;

@@ -5,6 +5,7 @@
 //  Created by Jake Widmer on 11/16/13.
 //  Copyright (c) 2013 Jake Widmer. All rights reserved.
 //
+/* ScannerViewController manages calls to AVCaptureSession and AVCaptureMetadataOutput, classes that are included in Apple’s AVFoundation framework, for barcode scanning. Also, this class queries the Parse database for the scanned barcodes and passes data to the add or update UI. Finally, this class updates the ‘lastScanned’ column in the Parse database. */
 
 #import "ScannerViewController.h"
 #import "SettingsViewController.h"
@@ -228,7 +229,6 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                 NSLog(@"Found barcode %@.\n", barcode.getBarcodeData);
                 NSDate *date = [NSDate date];
                 object[@"lastScanned"] = date;
-                //object[@"serial_number"] = barcode.getBarcodeData;
                 [object saveInBackground];
                 self.objectLastScanned = object;
                 [self showBarcodeAlert:barcode barcodeFound:YES inRoom:object[@"room"]];
@@ -241,9 +241,6 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
             } else {
                 // barcode not found
                 NSLog(@"Barcode not found %@.\n", barcode.getBarcodeData);
-                //PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
-                //object[@"serial_number"] = barcode.getBarcodeData;
-                //[object saveInBackground];
                 self.objectLastScanned = [PFObject objectWithClassName:@"DeviceInventory"];
                 NSDate *date = [NSDate date];
                 self.objectLastScanned[@"serial_number"] = barcode.getBarcodeData;
@@ -252,35 +249,8 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
             }
         }];
     }
-    
-
-    
-/*
-    //==The following code using parse was written by Maria Ramos==
-
-    //Look for entry with barcode in theParse database and set found entry to true (@YES)
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
-    
-    [query whereKey:@"serial_number" equalTo:barcode]; //if serial_number is unique, this should be enough
-                                                        //otherwise, we need to add another constraint, like 'location'
-    
-    //this works if there is only one entry for this serial number (and possibly location)
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *deviceInfo, NSError *error) {
-        if (!deviceInfo) {
-            
-            //did not find. want to add it? re-read?
-            
-        } else { //change to work with LastUpdated
-            
-            // The find succeeded. Make update to 'found' entry
-            deviceInfo[@"found"] = @YES;
-            [deviceInfo saveInBackground]; //can I use saveEventually here?
-                
-        }
-    }];
- */
 }
+
 - (void) showBarcodeAlert:(Barcode *)barcode barcodeFound:(BOOL)found inRoom:(NSString *)room{
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Code to do in background processing
@@ -288,9 +258,6 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
         alertMessage = [alertMessage stringByAppendingString:[barcode getBarcodeType]];
         alertMessage = [alertMessage stringByAppendingString:@" and data "];
         alertMessage = [alertMessage stringByAppendingString:[barcode getBarcodeData]];
-        //alertMessage = [alertMessage stringByAppendingString:@"\n\nBarcode added to array of "];
-        //alertMessage = [alertMessage stringByAppendingString:[NSString stringWithFormat:@"%lu",(unsigned long)[self.foundBarcodes count]-1]];
-        //alertMessage = [alertMessage stringByAppendingString:@" previously found barcodes."];
         UIAlertView *message;
         if (found) {
             alertMessage = [alertMessage stringByAppendingString:@" and room "];
@@ -307,10 +274,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                                                              delegate:self
                                                     cancelButtonTitle:@"Add"
                                                     otherButtonTitles:@"Scan again",nil];
-
         }
-        
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             // Code to update the UI/send notifications based on the results of the background processing
             [message show];

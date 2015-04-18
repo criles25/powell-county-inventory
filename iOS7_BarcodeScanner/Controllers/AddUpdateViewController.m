@@ -5,9 +5,10 @@
 //  Created by Charles Riley on 3/29/15.
 //  Copyright (c) 2015 Charles Riley. All rights reserved.
 //
+/* AddUpdateViewController handles the textfields in the add or update UI, queries the Parse database for the specific barcode the user entered, and if the barcode is found, updates the fields in the database with the information the user entered in the textfields. If the barcode is not found, it adds the barcode (and its respective fields) to the Parse database. */
+
 
 #import "AddUpdateViewController.h"
-#import <Parse/Parse.h>
 #import "ScannerViewController.h"
 #define NSStringFromBOOL(aBOOL)    aBOOL? @"YES" : @"NO"
 
@@ -79,7 +80,6 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
-    //NSDate *date = objectLastScanned[@"lastScanned"];
     
     self.txtFieldBranchYear.text = [formatter stringFromDate:objectLastScanned[@"lastScanned"]];
 }
@@ -88,6 +88,7 @@
     self->objectLastScanned = object;
     self->fromScan = true;
 }
+
 - (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
 {
     // hide keyboard
@@ -112,10 +113,6 @@
 
 -(void) dateTextField:(id)sender
 {
-    
-    //[picker setMaximumDate:[NSDate date]];
-    //NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    //[dateFormat setDateFormat:@"dd/MM/yyyy"];
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
@@ -371,14 +368,5 @@
         [self performSegueWithIdentifier:@"unwindToScan" sender:self];
     }
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -5,6 +5,7 @@
 //  Created by Charles Riley on 3/24/15.
 //  Copyright (c) 2015 Charles Riley. All rights reserved.
 //
+/* ImportViewController handles user interaction with the filename textfield on the import UI. It also parses the .csv file, uploads the data to the Parse database. */
 
 #import "ImportViewController.h"
 
@@ -26,9 +27,6 @@
 }
 
 - (IBAction)handleImportButtonClick:(id)sender {
-    // Charles Riley
-    // Maria, put your code here please!
-    
     //Store file name specified by user.
     
     NSString *filename = self.filenameTextField.text;
@@ -88,9 +86,6 @@
             
             NSMutableArray *problemRows = [[NSMutableArray alloc]init];
             BOOL problemExists = NO;
-            
-            //__block NSMutableArray *duplicateRows = [[NSMutableArray alloc]init];
-            //__block BOOL duplicateSerials = NO;
             
             NSMutableArray *allTheData = [[NSMutableArray alloc]init];
             
@@ -208,7 +203,6 @@
             
             //Now that we know column names are right, let's go through values of the .csv file
             
-            //for (NSString *row in rows)
             for(int i = 1; i < numOfRows; i++) //ignore first row, which contains column names
             {
                 //change this so that it works when an entry has commas
@@ -341,7 +335,6 @@
                             
                         }];
                         
-                        //deviceInfo[@"serial_number"] = therow[0];
                         
                     }
                 
@@ -402,15 +395,5 @@
     [textField resignFirstResponder];
     return YES;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

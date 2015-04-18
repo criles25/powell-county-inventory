@@ -5,6 +5,7 @@
 //  Created by Charles Riley on 3/14/15.
 //  Copyright (c) 2015 Charles Riley. All rights reserved.
 //
+/* ExportViewController handles user interaction with the textfields on the export UI. Once it gets the user input in the textfields, it queries the Parse database and creates a .csv file. */
 
 #import "ExportViewController.h"
 #import <Parse/Parse.h>
@@ -25,7 +26,6 @@
     [super viewDidLoad];
     // setup last found textfield
     UIDatePicker *datePicker = [[UIDatePicker alloc]init];
-    //[datePicker setDate:[NSDate date]];
     datePicker.datePickerMode = UIDatePickerModeDate;
     [datePicker addTarget:self action:@selector(dateTextField:) forControlEvents:UIControlEventValueChanged];
     [self.lastFoundTextField setInputView:datePicker];
@@ -38,9 +38,6 @@
 
 -(void) dateTextField:(id)sender
 {
-    //[picker setMaximumDate:[NSDate date]];
-    //NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    //[dateFormat setDateFormat:@"dd/MM/yyyy"];
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
@@ -51,7 +48,6 @@
 }
 
 - (IBAction)handleExportButtonClick:(id)sender {
-    // Charles Riley
     self.navigationItem.hidesBackButton = YES;
     NSMutableArray *warnings = [[NSMutableArray alloc] init];
     // query database
@@ -215,14 +211,5 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     self.navigationItem.hidesBackButton = NO;
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
