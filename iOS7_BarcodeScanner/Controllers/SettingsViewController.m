@@ -30,6 +30,7 @@
     return self;
 }
 
+// Do any additional setup after loading the view.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -57,6 +58,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+// Save button pressed
 - (IBAction)saveButtonPressed:(id)sender {
     self.allowedBarcodeTypes = [NSMutableArray new];
     for(UISwitch * sw in self.barcodeSwitches){

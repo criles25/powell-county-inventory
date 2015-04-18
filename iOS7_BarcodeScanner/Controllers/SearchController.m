@@ -17,6 +17,8 @@
 @end
 
 @implementation SearchController
+
+// Search button pressed
 - (IBAction)searchButtonPressed:(id)sender {
     // Query parse back end
     // check if text field is not empty
@@ -75,11 +77,14 @@
         
     }
 }
+
+// Hide the keyboard when the user touches outside the textfield
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     [self.searchTextField resignFirstResponder];
 }
 
+// Hide the keyboard when the user presses 'Return'
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;

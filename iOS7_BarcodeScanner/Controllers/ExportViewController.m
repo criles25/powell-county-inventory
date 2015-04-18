@@ -22,6 +22,7 @@
 
 @implementation ExportViewController
 
+// Do any additional setup after loading the view.
 - (void)viewDidLoad {
     [super viewDidLoad];
     // setup last found textfield
@@ -36,6 +37,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+// Format date in "Last Found" textfield
 -(void) dateTextField:(id)sender
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
@@ -47,6 +49,7 @@
     self.lastFoundTextField.text = [NSString stringWithFormat:@"%@",dateString];
 }
 
+// Export button pressed
 - (IBAction)handleExportButtonClick:(id)sender {
     self.navigationItem.hidesBackButton = YES;
     NSMutableArray *warnings = [[NSMutableArray alloc] init];
@@ -195,6 +198,7 @@
     self.filenameTextField.text = @"";
 }
 
+// Hide keyboard when user presses outside textfield
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.buildingTextField resignFirstResponder];
     [self.roomTextField resignFirstResponder];
@@ -203,11 +207,13 @@
     [self.filenameTextField resignFirstResponder];
 }
 
+// Hide keyboard when user presses 'Return'
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
 }
 
+// Show 'Back' button when user closes warning
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     self.navigationItem.hidesBackButton = NO;
 }

@@ -41,6 +41,7 @@
     BOOL fromScan;
 }
 
+// Do any additional setup after loading the view.
 - (void)viewDidLoad {
     [super viewDidLoad];
     // setup scroll view
@@ -84,11 +85,13 @@
     self.txtFieldBranchYear.text = [formatter stringFromDate:objectLastScanned[@"lastScanned"]];
 }
 
+// Fill in textfields with values from scanner
 -(void)setFields:(PFObject *)object; {
     self->objectLastScanned = object;
     self->fromScan = true;
 }
 
+// Hide the keyboard when user taps outside the textfield
 - (void)singleTapGestureCaptured:(UITapGestureRecognizer *)gesture
 {
     // hide keyboard
@@ -111,6 +114,7 @@
     [self.txtFieldBranchYear resignFirstResponder];
 }
 
+// Format the string that appears in the date textfield
 -(void) dateTextField:(id)sender
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
@@ -127,12 +131,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+// Submit button pressed
 - (IBAction)submitPressed:(id)sender {
     self.navigationItem.hidesBackButton = YES;
     // lock
     @synchronized(self) {
-        // barcode entered
         if (self.barcodeTextField.text.length > 0) {
+            // barcode entered
             // query parse
             PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
             [query whereKey:@"serial_number" equalTo:self.barcodeTextField.text];
@@ -141,6 +146,7 @@
                     // barcode found
                     NSLog(@"Found barcode %@.\n", self.barcodeTextField.text);
                     bool update = false;
+                    // get values from textfields
                     if (self.assetTextField.text.length > 0) {
                         update = true;
                         object[@"asset_tag"] = self.assetTextField.text;
@@ -221,10 +227,12 @@
                     }
                     if (update) {
                         [object saveInBackground];
+                        // alert message
                         NSString *string = @"You successfully updated the values for device with barcode ";
                         NSString *append = self.barcodeTextField.text;
                         NSString *message = [string stringByAppendingString:append];
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Updated!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        // reset values in textfields
                         self.barcodeTextField.text = @"";
                         self.assetTextField.text = @"";
                         self.buildingTextField.text = @"";
@@ -256,8 +264,10 @@
                 } else {
                     // barcode not found
                     NSLog(@"Barcode not found %@.\n", self.barcodeTextField.text);
+                    // create object to be stored in parse
                     PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
                     object[@"serial_number"] = self.barcodeTextField.text;
+                    // get values from textfields
                     if (self.assetTextField.text.length > 0) {
                         object[@"asset_tag"] = self.assetTextField.text;
                     }
@@ -323,10 +333,12 @@
                         //NSLog(@"%@\n", date);
                     }
                     [object saveInBackground];
+                    // alert message
                     NSString *string = @"You successfully added the device with barcode ";
                     NSString *append = self.barcodeTextField.text;
                     NSString *message = [string stringByAppendingString:append];
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Added!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    // reset values in textfields
                     self.barcodeTextField.text = @"";
                     self.assetTextField.text = @"";
                     self.buildingTextField.text = @"";
@@ -348,20 +360,21 @@
                 }
             }];
         } else {
+            // no barcode entered
             NSLog(@"No barcode!\n");
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Barcode!" message:@"Please enter a barcode to add or update." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
         }
     }
-    
-    
 }
 
+// Hide keyboard when 'Return' pressed
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
 }
 
+// Go back to scanner
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     self.navigationItem.hidesBackButton = NO;
     if (self->fromScan) {

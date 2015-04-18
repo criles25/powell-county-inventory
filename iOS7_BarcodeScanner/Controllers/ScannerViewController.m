@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Jake Widmer. All rights reserved.
 //
 /* ScannerViewController manages calls to AVCaptureSession and AVCaptureMetadataOutput, classes that are included in Apple’s AVFoundation framework, for barcode scanning. Also, this class queries the Parse database for the scanned barcodes and passes data to the add or update UI. Finally, this class updates the ‘lastScanned’ column in the Parse database. */
+/* We used an open-source implementation of a barcode scanner, found at https://github.com/jpwidmer/iOS7-BarcodeScanner, written by Jake Widmer. We modified the implementation to interact with the Parse database, as well as the add or update feature in our app. We also fixed a bug which caused it to scan a barcode multiple times. */
 
 #import "ScannerViewController.h"
 #import "SettingsViewController.h"
@@ -51,6 +52,7 @@
     UIBarButtonItem *oldButton;
 }
 
+// Do any additional setup after loading the view.
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -88,12 +90,13 @@
     [self.allowedBarcodeTypes addObject:@"org.iso.Code128"];
 }
 
+// call startRunning once the view fully appears
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self startRunning];
 }
 
-
+// call stopRunning once the view fully disappears
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self stopRunning];
@@ -106,6 +109,7 @@
 }
 #pragma mark - AV capture methods
 
+// Creates a capture session and processes metadata (barcode)
 - (void)setupCaptureSession {
     // 1
     if (_captureSession) return;
@@ -143,6 +147,7 @@
     }
 }
 
+// Turn on scanner and show camera on screen
 - (void)startRunning {
     if (_running) return;
     [_captureSession startRunning];
@@ -150,6 +155,8 @@
     _metadataOutput.availableMetadataObjectTypes;
     _running = YES;
 }
+
+// Turn off scanner and pause camera on screen
 - (void)stopRunning {
     if (!_running) return;
     [_captureSession stopRunning];
@@ -165,9 +172,12 @@
 }
 
 #pragma mark - Button action functions
+// Go to the settings view
 - (IBAction)settingsButtonPressed:(id)sender {
     [self performSegueWithIdentifier:@"toSettings" sender:self];
 }
+
+// Pass objects to the add or update view or the settings view
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"toSettings"]) {
@@ -184,6 +194,7 @@
 
 #pragma mark - Delegate functions
 
+// Stores metadata (barcode data) in array and calls validBarcodeFound
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
 didOutputMetadataObjects:(NSArray *)metadataObjects
        fromConnection:(AVCaptureConnection *)connection
@@ -213,20 +224,23 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
      }];
 }
 
+// Interacts with Parse database and calls the appropriate alert message
 - (void) validBarcodeFound:(Barcode *)barcode{
     [self stopRunning];
     [self.foundBarcodes addObject:barcode];
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = nil;
-    // Charles Riley
-    if (!self->alertShowing) {
+
+    if (!self->alertShowing) { // this if statement prevents scanner doing multiple scans
         self->alertShowing = true;
+        // query parse
         PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
         [query whereKey:@"serial_number" equalTo:barcode.getBarcodeData];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if (!error) {
                 // barcode found
                 NSLog(@"Found barcode %@.\n", barcode.getBarcodeData);
+                // update 'lastScanned' in database
                 NSDate *date = [NSDate date];
                 object[@"lastScanned"] = date;
                 [object saveInBackground];
@@ -236,6 +250,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                 // couldn't connect to parse
                 NSLog(@"Uh oh, we couldn't even connect to the Parse Cloud!");
                 self->network = true;
+                // alert message
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't Connect!" message:@"We couldn't connect to Parse. Make sure you have internet access or cell service." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alert show];
             } else {
@@ -251,6 +266,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     }
 }
 
+// Setup alert message
 - (void) showBarcodeAlert:(Barcode *)barcode barcodeFound:(BOOL)found inRoom:(NSString *)room{
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Code to do in background processing
@@ -260,6 +276,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
         alertMessage = [alertMessage stringByAppendingString:[barcode getBarcodeData]];
         UIAlertView *message;
         if (found) {
+            // barcode exists in Parse
             alertMessage = [alertMessage stringByAppendingString:@" and room "];
             alertMessage = [alertMessage stringByAppendingString:room];
             message = [[UIAlertView alloc] initWithTitle:@"Barcode Found!"
@@ -269,6 +286,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                                                     otherButtonTitles:@"Scan again",nil];
 
         } else {
+            // barcode doesn't exists in Parse
             message = [[UIAlertView alloc] initWithTitle:@"Barcode Not Found!"
                                                               message:alertMessage
                                                              delegate:self
@@ -282,6 +300,8 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
         });
     });
 }
+
+// Handle different alert message buttons
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     self.navigationItem.hidesBackButton = NO;
     self.navigationItem.rightBarButtonItem = oldButton;
@@ -304,6 +324,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     }
 }
 
+// Update allowed barcodes
 - (void) settingsChanged:(NSMutableArray *)allowedTypes{
     for(NSObject * obj in allowedTypes){
         NSLog(@"%@",obj);
@@ -313,6 +334,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
     }
 }
 
+// Allows add or update view to come back to scanner
 - (IBAction)unwindToScan:(UIStoryboardSegue *)segue {}
 
 
