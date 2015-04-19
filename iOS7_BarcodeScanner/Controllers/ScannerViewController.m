@@ -235,7 +235,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
         self->alertShowing = true;
         // query parse
         PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
-        [query whereKey:@"serial_number" equalTo:barcode.getBarcodeData];
+        [query whereKey:@"asset_tag" equalTo:barcode.getBarcodeData];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if (!error) {
                 // barcode found
@@ -258,7 +258,7 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
                 NSLog(@"Barcode not found %@.\n", barcode.getBarcodeData);
                 self.objectLastScanned = [PFObject objectWithClassName:@"DeviceInventory"];
                 NSDate *date = [NSDate date];
-                self.objectLastScanned[@"serial_number"] = barcode.getBarcodeData;
+                self.objectLastScanned[@"asset_tag"] = barcode.getBarcodeData;
                 self.objectLastScanned[@"lastScanned"] = date;
                 [self showBarcodeAlert:barcode barcodeFound:NO inRoom:nil];
             }

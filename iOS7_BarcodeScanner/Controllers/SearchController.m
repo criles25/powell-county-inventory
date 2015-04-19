@@ -28,7 +28,7 @@
         PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
         
         // Get record matched with serial number attribute in Device Inventory table
-        [query whereKey:@"serial_number" equalTo:self.searchTextField.text];
+        [query whereKey:@"asset_tag" equalTo:self.searchTextField.text];
         
         // Get the objects
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
