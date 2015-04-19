@@ -124,8 +124,8 @@
             BOOL columnNameProblem = NO;
             NSMutableArray *problemColumnNames = [[NSMutableArray alloc]init];
             
-            NSMutableArray *theSerials = [[NSMutableArray alloc] init];
-            NSMutableArray *repeatedSerials = [[NSMutableArray alloc] init];
+            NSMutableArray *theAssets = [[NSMutableArray alloc] init];
+            NSMutableArray *repeatedAssets = [[NSMutableArray alloc] init];
             
             for(int i = 0; i < numOfColumns; i++)
             {
@@ -147,8 +147,8 @@
                 }
             }
             
-            //Now check if the .csv file contains a serial_number column and a room column
-            //We will check this by checking if "serial_number" and "room" are still in parsecolumnNames.
+            //Now check if the .csv file contains a asset_tag column and a room column
+            //We will check this by checking if "asset_tag" and "room" are still in parsecolumnNames.
             //These two strings would have been removed by now if the .csv file did have the respective
             //columns.
 
@@ -177,19 +177,19 @@
             {
                 //Okay, so the column names in the .csv file exist within the Parse table.
                 
-                //Now check if the .csv file contains a serial_number column and a room column
-                //We will check this by checking if "serial_number" and "room" are still in parsecolumnNames.
+                //Now check if the .csv file contains a asset_tag column and a room column
+                //We will check this by checking if "asset_tag" and "room" are still in parsecolumnNames.
                 //These two strings would have been removed by now if the .csv file did have the respective
                 //columns.
                 
-                if(([parseColumnNames containsObject: @"serial_number"] == YES) || ([parseColumnNames containsObject: @"room"] == YES))
+                if(([parseColumnNames containsObject: @"asset_tag"] == YES) || ([parseColumnNames containsObject: @"room"] == YES))
                 {
                     //ALERT THE USER
                     //Tell him/her which columns have inconsistencies
                     //should tell the user that it is possible that the column name is correct but it is a duplicate**
                     
                     UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
-                                                                     message:@"The file is missing either a serial_number column or a room column."
+                                                                     message:@"The file is missing either a asset_tag column or a room column."
                                                                     delegate:self
                                                            cancelButtonTitle:@"OK"
                                                            otherButtonTitles: nil];
@@ -209,14 +209,14 @@
                 //f an entry is num1,num2 then the csv file has it as "num1,num2" (including the quotes)
                 NSArray *columns = [rows[i] componentsSeparatedByString:@","]; //entries in row i
                 
-                //go through stored entries in current row and check if serial number or room are empty
-                for(int j = 0; j < [columns count]; j++)
+                //go through stored entries in current row and check if asset number or room are empty
+                for(int j = 0; j < [columns count]-1; j++)
                 {
-                    if([columnNames[j] isEqualToString:@"room"] || [columnNames[j] isEqualToString:@"serial_number"])
+                    if([columnNames[j] isEqualToString:@"room"] || [columnNames[j] isEqualToString:@"asset_tag"])
                     {
                         if([columns[j] length] == 0) //if there is no room value...
                         {
-                            //serial number or room entry is empty. not good! This means that none of this will be stored
+                            //asset number or room entry is empty. not good! This means that none of this will be stored
                             //into the Parse table until the problem is fixed. So, for now, store the row number so
                             //that later we can tell the user where the problem was found.
                             
@@ -224,21 +224,21 @@
                             [problemRows addObject:rowNum];
                             problemExists = YES;
                         }
-                        else //there is a value for serial number, let's check if it is repeated
+                        else //there is a value for asset number, let's check if it is repeated
                         {
-                            if([columnNames[j] isEqualToString:@"serial_number"])
+                            if([columnNames[j] isEqualToString:@"asset_tag"])
                             {
-                                NSString *serialnumber = columns[j];
-                                if([theSerials containsObject: serialnumber] == YES)
+                                NSString *assetnumber = columns[j];
+                                if([theAssets containsObject: assetnumber] == YES)
                                 {
                                     
                                     NSNumber *rowNum = [NSNumber numberWithInt:i+1];
-                                    [repeatedSerials addObject:rowNum];
+                                    [repeatedAssets addObject:rowNum];
                                     
                                 }
                                 else
                                 {
-                                    [theSerials addObject:serialnumber]; //serialnumber is columns[i] or something
+                                    [theAssets addObject:assetnumber]; //assetnumber is columns[i] or something
                                 }
                             }
                         }
@@ -252,29 +252,29 @@
 
             }
             
-            //Now, if no problems are present (no serial numbers or rooms were empty), then proceed to update Parse.
+            //Now, if no problems are present (no asset numbers or rooms were empty), then proceed to update Parse.
             
-            if((problemExists == NO) && ([repeatedSerials count] == 0))
+            if((problemExists == NO) && ([repeatedAssets count] == 0))
             {
-                    NSInteger serialColIndex = [columnNames indexOfObject:@"serial_number"];
+                    NSInteger assetColIndex = [columnNames indexOfObject:@"asset_tag"];
                 
-                    for(int i = 0; i < (numOfRows-1); i++) //go through rows
+                    for(int i = 0; i < (numOfRows-2); i++) //go through rows
                     {
-                        NSString *serialnumber = allTheData[i][(int)serialColIndex];
+                        NSString *assetnumber = allTheData[i][(int)assetColIndex];
                         
                         
                         PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
-                        [query whereKey:@"serial_number" equalTo:serialnumber];
+                        [query whereKey:@"asset_tag" equalTo:assetnumber];
                         
                         NSArray *therow = allTheData[i];
                         
                         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                             if (!error)
-                            { //Serial number already exists in the database, so update the entry.
+                            { //Asset number already exists in the database, so update the entry.
                         
                                 for(int j=0; j < numOfColumns; j++) //go through rows
                                 {
-                                    if(j != serialColIndex) //ignore serial number for update
+                                    if(j != assetColIndex) //ignore asset number for update
                                     {
                                         //if the column is a boolean, cast the string to boolean
                         
@@ -305,9 +305,9 @@
                             }
                             else
                             {
-                                //Serial number does not exist in the Parse database. Add new entry to parse table.
+                                //Asset number does not exist in the Parse database. Add new entry to parse table.
                                 
-                                NSLog(@"Serial number not found %@.\n", serialnumber);
+                                NSLog(@"Asset number not found %@.\n", assetnumber);
                                 
                                 PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
                                 
@@ -350,10 +350,10 @@
             }
             else if(problemExists == YES)//there is a problem present!
             {
-                //Alert the user that either serial numbers or rooms were left blank in some rows
+                //Alert the user that either asset numbers or rooms were left blank in some rows
                 //and specify in which rows
                 
-                NSString *message1 = @"The following rows in the file have either empty serial numbers or empty room values: ";
+                NSString *message1 = @"The following rows in the file have either empty asset numbers or empty room values: ";
                 NSString *theproblemrows = [[problemRows valueForKey:@"description"] componentsJoinedByString:@","];
                 
                 NSString *themessage = [NSString stringWithFormat:@"%@%@", message1, theproblemrows];
@@ -365,12 +365,12 @@
                                                        otherButtonTitles: nil];
                 [alert show];
             }
-            else if(([repeatedSerials count] > 0))
+            else if(([repeatedAssets count] > 0))
             {
-                //Alert the user that some serial numbers were repeated within the csv
+                //Alert the user that some asset numbers were repeated within the csv
                 
-                NSString *message1 = @"The following rows in the file contain repeated serial numbers within the file: ";
-                NSString *therepeatedrows = [[repeatedSerials valueForKey:@"description"] componentsJoinedByString:@","];
+                NSString *message1 = @"The following rows in the file contain repeated asset numbers within the file: ";
+                NSString *therepeatedrows = [[repeatedAssets valueForKey:@"description"] componentsJoinedByString:@","];
                 
                 NSString *themessage = [NSString stringWithFormat:@"%@%@", message1, therepeatedrows];
                 
