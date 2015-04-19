@@ -228,9 +228,10 @@
                     if (update) {
                         [object saveInBackground];
                         // alert message
-                        NSString *string = @"You successfully updated the values for device with barcode ";
+                        NSString *string = @"You successfully updated the values for device with barcode \'";
                         NSString *append = self.barcodeTextField.text;
                         NSString *message = [string stringByAppendingString:append];
+                        message = [message stringByAppendingString:@"\'"];
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Updated!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         // reset values in textfields
                         self.barcodeTextField.text = @"";
@@ -334,9 +335,10 @@
                     }
                     [object saveInBackground];
                     // alert message
-                    NSString *string = @"You successfully added the device with barcode ";
+                    NSString *string = @"You successfully added the device with barcode \'";
                     NSString *append = self.barcodeTextField.text;
                     NSString *message = [string stringByAppendingString:append];
+                    message = [message stringByAppendingString:@"\'"];
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Added!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     // reset values in textfields
                     self.barcodeTextField.text = @"";
