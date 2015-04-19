@@ -205,7 +205,7 @@
             
             for(int i = 1; i < numOfRows; i++) //ignore first row, which contains column names
             {
-                //change this so that it works when an entry has commas
+                //change this so that it works when an entry has commas and double quotes
                 //f an entry is num1,num2 then the csv file has it as "num1,num2" (including the quotes)
                 NSArray *columns = [rows[i] componentsSeparatedByString:@","]; //entries in row i
                 
