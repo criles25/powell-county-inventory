@@ -97,8 +97,9 @@
                 NSArray *array = [objects filteredArrayUsingPredicate:predicate];
                 if (![array count]) {
                     NSLog(@"Warning: none of this building type %@ found!", building);
-                    NSString *warning = @"Warning: none of building type ";
+                    NSString *warning = @"Warning: none of building type \'";
                     warning = [warning stringByAppendingString:building];
+                    warning = [warning stringByAppendingString:@"\'"];
                     [warnings addObject:warning];
                 }
             }
@@ -107,8 +108,9 @@
                 NSArray *array = [objects filteredArrayUsingPredicate:predicate];
                 if (![array count]) {
                     NSLog(@"Warning: none of this room type %@ found!", room);
-                    NSString *warning = @"Warning: none of room type ";
+                    NSString *warning = @"Warning: none of room type \'";
                     warning = [warning stringByAppendingString:room];
+                    warning = [warning stringByAppendingString:@"\'"];
                     [warnings addObject:warning];
                 }
             }
@@ -117,8 +119,9 @@
                 NSArray *array = [objects filteredArrayUsingPredicate:predicate];
                 if (![array count]) {
                     NSLog(@"Warning: none of this device type %@ found!", device);
-                    NSString *warning = @"Warning: none of device type ";
+                    NSString *warning = @"Warning: none of device type \'";
                     warning = [warning stringByAppendingString:device];
+                    warning = [warning stringByAppendingString:@"\'"];
                     [warnings addObject:warning];
                 }
             }
@@ -144,8 +147,9 @@
             NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
             NSString *file = [path stringByAppendingPathComponent:filename];
             if ([[NSFileManager defaultManager] fileExistsAtPath:file]) {
-                NSString *warning = @"Warning: overwriting existing file with name ";
+                NSString *warning = @"Warning: overwriting existing file with name \'";
                 warning = [warning stringByAppendingString:filename];
+                warning = [warning stringByAppendingString:@"\'"];
                 [warnings addObject:warning];
             }
             [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
@@ -175,8 +179,9 @@
             }
             [fileHandle closeFile];
             NSLog(@"%@\n", path);
-            NSString *message = @"Exported inventory to .csv file with name ";
+            NSString *message = @"Exported inventory to .csv file with name \'";
             message = [message stringByAppendingString:filename];
+            message = [message stringByAppendingString:@"\'"];
             for (NSString *warning in warnings) {
                 message = [message stringByAppendingString:@"\n"];
                 message = [message stringByAppendingString:warning];
