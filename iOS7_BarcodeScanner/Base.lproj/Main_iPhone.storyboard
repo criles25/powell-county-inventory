@@ -365,7 +365,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zfb-gi-mvP">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="900"/>
                                         <subviews>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Barcode" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fAj-sW-ocw">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Asset Tag" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fAj-sW-ocw">
                                                 <rect key="frame" x="8" y="115" width="304" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
@@ -373,7 +373,7 @@
                                                     <outlet property="delegate" destination="BX5-uR-bd4" id="ZlS-q0-Yyl"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Asset Number" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lhb-XK-ucA">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Serial Number" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lhb-XK-ucA">
                                                 <rect key="frame" x="8" y="153" width="304" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
@@ -607,7 +607,6 @@
                     <size key="freeformSize" width="320" height="900"/>
                     <connections>
                         <outlet property="adminAccessTextField" destination="dD3-T5-sTN" id="D1l-qu-uqQ"/>
-                        <outlet property="assetTextField" destination="Lhb-XK-ucA" id="rz5-dA-8YQ"/>
                         <outlet property="barcodeTextField" destination="fAj-sW-ocw" id="5cL-lo-yzT"/>
                         <outlet property="brandTextField" destination="uqz-2l-4T0" id="EUy-lQ-xDs"/>
                         <outlet property="buildingTextField" destination="oEr-cp-w0b" id="hgk-f8-Oop"/>
@@ -621,6 +620,7 @@
                         <outlet property="ramTextField" destination="mBP-Dl-7cM" id="dxl-jo-v4A"/>
                         <outlet property="roomTextField" destination="wPV-5d-hBJ" id="kSX-En-ica"/>
                         <outlet property="scrollView" destination="apD-9S-Ojq" id="Mfh-hm-kLS"/>
+                        <outlet property="serialTextField" destination="Lhb-XK-ucA" id="rTu-59-tSm"/>
                         <outlet property="studentAccessTextField" destination="QYF-sq-0nD" id="ibX-i5-8EG"/>
                         <outlet property="teacherAccessTextField" destination="BN6-Yz-awD" id="MpT-xp-t4i"/>
                         <outlet property="txtFieldBranchYear" destination="BBd-5l-km1" id="1Ve-C6-b5N"/>

@@ -13,8 +13,8 @@
 #define NSStringFromBOOL(aBOOL)    aBOOL? @"YES" : @"NO"
 
 @interface AddUpdateViewController ()
-@property (weak, nonatomic) IBOutlet UITextField *barcodeTextField;
-@property (weak, nonatomic) IBOutlet UITextField *assetTextField;
+@property (weak, nonatomic) IBOutlet UITextField *barcodeTextField; // asset tag
+@property (weak, nonatomic) IBOutlet UITextField *serialTextField;
 @property (weak, nonatomic) IBOutlet UITextField *buildingTextField;
 @property (weak, nonatomic) IBOutlet UITextField *roomTextField;
 @property (weak, nonatomic) IBOutlet UITextField *deviceTypeTextField;
@@ -54,8 +54,8 @@
     [datePicker addTarget:self action:@selector(dateTextField:) forControlEvents:UIControlEventValueChanged];
     [self.txtFieldBranchYear setInputView:datePicker];
     // setup segue from scanner
-    self.barcodeTextField.text = objectLastScanned[@"serial_number"];
-    self.assetTextField.text = objectLastScanned[@"asset_tag"];
+    self.barcodeTextField.text = objectLastScanned[@"asset_tag"];
+    self.serialTextField.text = objectLastScanned[@"serial_number"];
     self.buildingTextField.text = objectLastScanned[@"building"];
     self.roomTextField.text = objectLastScanned[@"room"];
     self.deviceTypeTextField.text = objectLastScanned[@"device_type"];
@@ -96,7 +96,7 @@
 {
     // hide keyboard
     [self.barcodeTextField resignFirstResponder];
-    [self.assetTextField resignFirstResponder];
+    [self.serialTextField resignFirstResponder];
     [self.buildingTextField resignFirstResponder];
     [self.roomTextField resignFirstResponder];
     [self.deviceTypeTextField resignFirstResponder];
@@ -140,16 +140,16 @@
             // barcode entered
             // query parse
             PFQuery *query = [PFQuery queryWithClassName:@"DeviceInventory"];
-            [query whereKey:@"serial_number" equalTo:self.barcodeTextField.text];
+            [query whereKey:@"asset_tag" equalTo:self.barcodeTextField.text];
             [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                 if (!error) {
                     // barcode found
                     NSLog(@"Found barcode %@.\n", self.barcodeTextField.text);
                     bool update = false;
                     // get values from textfields
-                    if (self.assetTextField.text.length > 0) {
+                    if (self.serialTextField.text.length > 0) {
                         update = true;
-                        object[@"asset_tag"] = self.assetTextField.text;
+                        object[@"serial_number"] = self.serialTextField.text;
                     }
                     if (self.buildingTextField.text.length > 0) {
                         update = true;
@@ -235,7 +235,7 @@
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Updated!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         // reset values in textfields
                         self.barcodeTextField.text = @"";
-                        self.assetTextField.text = @"";
+                        self.serialTextField.text = @"";
                         self.buildingTextField.text = @"";
                         self.roomTextField.text = @"";
                         self.deviceTypeTextField.text = @"";
@@ -267,10 +267,10 @@
                     NSLog(@"Barcode not found %@.\n", self.barcodeTextField.text);
                     // create object to be stored in parse
                     PFObject *object = [PFObject objectWithClassName:@"DeviceInventory"];
-                    object[@"serial_number"] = self.barcodeTextField.text;
+                    object[@"asset_tag"] = self.barcodeTextField.text;
                     // get values from textfields
-                    if (self.assetTextField.text.length > 0) {
-                        object[@"asset_tag"] = self.assetTextField.text;
+                    if (self.serialTextField.text.length > 0) {
+                        object[@"serial_number"] = self.serialTextField.text;
                     }
                     if (self.buildingTextField.text.length > 0) {
                         object[@"building"] = self.buildingTextField.text;
@@ -342,7 +342,7 @@
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Added!" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     // reset values in textfields
                     self.barcodeTextField.text = @"";
-                    self.assetTextField.text = @"";
+                    self.serialTextField.text = @"";
                     self.buildingTextField.text = @"";
                     self.roomTextField.text = @"";
                     self.deviceTypeTextField.text = @"";
