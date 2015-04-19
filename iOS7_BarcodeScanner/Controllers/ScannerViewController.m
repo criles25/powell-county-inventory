@@ -270,15 +270,18 @@ didOutputMetadataObjects:(NSArray *)metadataObjects
 - (void) showBarcodeAlert:(Barcode *)barcode barcodeFound:(BOOL)found inRoom:(NSString *)room{
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Code to do in background processing
-        NSString * alertMessage = @"You scanned a barcode with type ";
+        NSString * alertMessage = @"You scanned a barcode with type \'";
         alertMessage = [alertMessage stringByAppendingString:[barcode getBarcodeType]];
-        alertMessage = [alertMessage stringByAppendingString:@" and data "];
+        alertMessage = [alertMessage stringByAppendingString:@"\'"];
+        alertMessage = [alertMessage stringByAppendingString:@" and data \'"];
         alertMessage = [alertMessage stringByAppendingString:[barcode getBarcodeData]];
+        alertMessage = [alertMessage stringByAppendingString:@"\'"];
         UIAlertView *message;
         if (found) {
             // barcode exists in Parse
-            alertMessage = [alertMessage stringByAppendingString:@" and room "];
+            alertMessage = [alertMessage stringByAppendingString:@" and room \'"];
             alertMessage = [alertMessage stringByAppendingString:room];
+            alertMessage = [alertMessage stringByAppendingString:@"\'"];
             message = [[UIAlertView alloc] initWithTitle:@"Barcode Found!"
                                                               message:alertMessage
                                                              delegate:self
