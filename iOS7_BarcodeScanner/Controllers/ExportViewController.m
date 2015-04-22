@@ -41,7 +41,7 @@
 -(void) dateTextField:(id)sender
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'00':'00':'00.000'Z'"];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
     UIDatePicker *picker = (UIDatePicker*)self.lastFoundTextField.inputView;
     NSDate *eventDate = picker.date;
