@@ -297,11 +297,11 @@
                             else if ([error code] == kPFErrorConnectionFailed)
                             {
                                 // couldn't connect to parse
-                                NSLog(@"Uh oh, we couldn't even connect to the Parse Cloud!");
+                                /*NSLog(@"Uh oh, we couldn't even connect to the Parse Cloud!");
                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't Connect!" message:@"We couldn't connect to Parse. Make sure you have internet access or cell service." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                                 [alert show];
                                 
-                                return;
+                                return;*/
                             }
                             else
                             {
